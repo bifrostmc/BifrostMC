@@ -19,7 +19,12 @@ class MessageController {
 			if (!state && msg.member.id !== process.env.OWNER) {
 				msg.reply('Você não tem permissão para executar esse comando.');
 			} else {
-				commandFile.run(bot, msg, args, prefix);
+				(async () => {
+					const response = await commandFile.run(bot, msg, args, prefix);
+					console.log(
+						`${msg.member.user.username} | ${prefix}${cmd} - ${response}`
+					);
+				})();
 			}
 		}
 	}
