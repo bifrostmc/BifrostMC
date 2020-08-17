@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "discord.js": "^12.3.1",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "register-cmd-discord": "^1.0.0"
   }
 }

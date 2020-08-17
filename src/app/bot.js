@@ -1,10 +1,34 @@
-import { Client } from 'discord.js';
+import { Client, Collection } from 'discord.js';
+import path from 'path';
+import { registerCmds } from 'register-cmd-discord';
+
+import MessageController from './events/MessageController';
 
 class Bot {
 	constructor() {
 		this.bot = new Client();
 
+		this.registerCommands();
+		this.registerEvents();
 		this.login();
+	}
+
+	registerCommands() {
+		const pathCommands = path.resolve(__dirname, 'commands');
+		this.bot.commands = new Collection();
+		this.bot.aliases = new Collection();
+		const { cmds, als } = registerCmds(
+			pathCommands,
+			this.bot.commands,
+			this.bot.aliases
+		);
+
+		this.bot.commands = cmds;
+		this.bot.aliases = als;
+	}
+
+	registerEvents() {
+		this.bot.on('message', (msg) => new MessageController(msg, this.bot));
 	}
 
 	async login() {
