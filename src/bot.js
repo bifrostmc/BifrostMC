@@ -2,7 +2,7 @@ import { Client, Collection } from 'discord.js';
 import path from 'path';
 import { registerCmds } from 'register-cmd-discord';
 
-import MessageController from './events/MessageController';
+import MessageController from './app/events/MessageController';
 
 class Bot {
 	constructor() {
@@ -14,7 +14,7 @@ class Bot {
 	}
 
 	registerCommands() {
-		const pathCommands = path.resolve(__dirname, 'commands');
+		const pathCommands = path.resolve(__dirname, 'app', 'commands');
 		this.bot.commands = new Collection();
 		this.bot.aliases = new Collection();
 		const { cmds, als } = registerCmds(
@@ -33,7 +33,7 @@ class Bot {
 
 	async login() {
 		try {
-			await this.bot.login('process.env.TOKEN');
+			await this.bot.login(process.env.TOKEN);
 			console.log('Bot iniciado com sucesso, já pode executar comandos.');
 		} catch (error) {
 			console.log(
