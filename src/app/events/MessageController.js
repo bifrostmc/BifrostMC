@@ -20,9 +20,11 @@ class MessageController {
 				msg.reply('Você não tem permissão para executar esse comando.');
 			} else {
 				(async () => {
-					const response = await commandFile.run(bot, msg, args, prefix);
+					const response = await commandFile.run({ bot, msg, args, prefix });
 					console.log(
-						`${msg.member.user.username} | ${prefix}${cmd} - ${response}`
+						`${msg.member.user.username} | ${prefix}${cmd} - ${
+							response || 'Sem nenhum retorno assíncrono.'
+						}`
 					);
 				})();
 			}

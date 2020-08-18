@@ -30,7 +30,10 @@
   "dependencies": {
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
+    "knex": "^0.21.5",
+    "moment": "^2.27.0",
     "readdirp": "^3.4.0",
-    "register-cmd-discord": "^1.0.0"
+    "register-cmd-discord": "^1.0.0",
+    "sqlite3": "^5.0.0"
   }
 }
