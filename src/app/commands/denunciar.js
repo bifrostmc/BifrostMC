@@ -1,7 +1,10 @@
 import { MessageEmbed } from 'discord.js';
 import moment from 'moment';
+
 import knex from '../database';
 import configuration from '../../../configure';
+
+import checkUserHasPermission from '../utils/checkUserHasPermission';
 
 class Denunciar {
 	constructor() {
@@ -91,9 +94,9 @@ class Denunciar {
 										)
 										.addField(
 											'**Usuário denunciado » **',
-											`<@${userMention.id}>`
+											`${userMention.user.tag}`
 										)
-										.addField('**Author » **', `<@${messageReason.author.id}>`)
+										.addField('**Author » **', `${messageReason.author.tag}`)
 										.addField(
 											`**Criado em » ** \`${moment().format(
 												'DD/MM/YYYY, h:mm:ss a'
@@ -113,7 +116,8 @@ class Denunciar {
 										);
 
 										if (channelInGuild) {
-											previewEmbed
+											const adminEmbedBanned = previewEmbed;
+											adminEmbedBanned
 												.addField(
 													'Clique em ✅ para confirmar a denúncia e banir o usuário',
 													'Clique em ❌ para cancelar a denúncia assim o usuário não será banido'
@@ -125,28 +129,42 @@ class Denunciar {
 													await messageForAdmin.react('✅');
 													await messageForAdmin.react('❌');
 
-													const filter = (reaction, user) =>
-														(reaction.emoji.name === '✅' ||
-															reaction.emoji.name === '❌') &&
-														user.id !== msg.author.id;
-
+													const filter = (reaction, user) => {
+														const userReacting = msg.guild.members.cache.get(
+															user.id
+														);
+														return (
+															(reaction.emoji.name === '✅' ||
+																reaction.emoji.name === '❌') &&
+															user.id !== msg.author.id &&
+															checkUserHasPermission(
+																'BAN_MEMBERS',
+																userReacting
+															)
+														);
+													};
 													const collector = messageForAdmin.createReactionCollector(
 														filter
 													);
 
-													collector.on('collect', (reaction, user) => {
+													collector.on('collect', async (reaction, user) => {
 														switch (reaction.emoji.name) {
 															case '✅':
 																messageForAdmin.delete().catch(() => {});
-																messageForAdmin.channel.send(
+																await messageForAdmin.channel.send(
 																	'🎉 O usuário foi banido com sucesso! Obrigado pela colaboração 🎉'
 																);
-																msg.author.send(
+																await msg.author.send(
 																	`🎉 Parabéns sua denúncia ao usuário \`${userMention.user.username}#${userMention.user.discriminator}\` foi aprovada, o usuário já foi banido de nosso discord, por \`${user.username}#${user.discriminator}\`. 🎉`
 																);
-																msg.author.send(
+																await msg.author.send(
 																	`Agradecemos pela sua colaboração e pedimos que continue a reportar novos possíveis infratores.`
 																);
+																await userMention.user.send(
+																	`❌ Você foi denúnciado e recebeu um ban, de nosso servidor \`${msg.channel.guild.name}\`, veja a denúncia logo abaixo ❌`
+																);
+																await userMention.user.send(previewEmbed);
+																userMention.ban();
 																break;
 															case '❌':
 																messageForAdmin.channel.send(

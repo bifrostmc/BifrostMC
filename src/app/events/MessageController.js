@@ -4,6 +4,7 @@ class MessageController {
 	constructor(msg, bot) {
 		const prefix = process.env.PREFIX;
 		if (!msg.content.startsWith(prefix)) return;
+		if (msg.author.bot) return;
 		const args = msg.content.slice(prefix.length).trim().split(' ');
 		const cmd = args.shift().toLowerCase();
 		const commandFile =
