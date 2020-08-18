@@ -116,15 +116,41 @@ class Denunciar {
 										);
 
 										if (channelInGuild) {
-											const adminEmbedBanned = previewEmbed;
-											adminEmbedBanned
+											const adminEmbedBanned = new MessageEmbed()
+												.setTitle('📣 **Denúncia ** 📣')
+												.setDescription(
+													`**\nMotivo »** ${messageReason.content}`
+												)
+												.setThumbnail(bot.user.avatarURL())
+												.addField(
+													'**Provas » **',
+													`\`\`\`yaml\n${messageEvidences}\`\`\``
+												)
+												.addField(
+													'**Usuário denunciado » **',
+													`${userMention.user.tag}`
+												)
+												.addField(
+													'**Author » **',
+													`${messageReason.author.tag}`
+												)
+												.addField(
+													`**Criado em » ** \`${moment().format(
+														'DD/MM/YYYY, h:mm:ss a'
+													)}\``,
+													'\u200B'
+												)
 												.addField(
 													'Clique em ✅ para confirmar a denúncia e banir o usuário',
 													'Clique em ❌ para cancelar a denúncia assim o usuário não será banido'
 												)
-												.setTitle('📣 **Denúncia ** 📣');
+												.setTimestamp()
+												.setFooter(
+													`Copyright © 2020 ${bot.user.username}`,
+													bot.user.avatarURL()
+												);
 											channelInGuild
-												.send(previewEmbed)
+												.send(adminEmbedBanned)
 												.then(async (messageForAdmin) => {
 													await messageForAdmin.react('✅');
 													await messageForAdmin.react('❌');
@@ -140,7 +166,9 @@ class Denunciar {
 															checkUserHasPermission(
 																'BAN_MEMBERS',
 																userReacting
-															)
+															) &&
+															userReacting.roles.highest.rawPosition >
+																userMention.roles.highest.rawPosition
 														);
 													};
 													const collector = messageForAdmin.createReactionCollector(
@@ -164,7 +192,9 @@ class Denunciar {
 																	`❌ Você foi denúnciado e recebeu um ban, de nosso servidor \`${msg.channel.guild.name}\`, veja a denúncia logo abaixo ❌`
 																);
 																await userMention.user.send(previewEmbed);
-																userMention.ban();
+																userMention.ban({
+																	reason: messageReason.content,
+																});
 																break;
 															case '❌':
 																messageForAdmin.channel.send(
