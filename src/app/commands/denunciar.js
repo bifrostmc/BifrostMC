@@ -9,8 +9,8 @@ import checkUserHasPermission from '../utils/checkUserHasPermission';
 class Denunciar {
 	constructor() {
 		this.config = {
-			name: 'denunciar',
-			aliases: [],
+			name: 'report',
+			aliases: ['denunciar'],
 			help:
 				'Com esse comando você pode denunciar um usuário que quebrou nossas regras.',
 			requiredPermissions: [],
@@ -60,12 +60,12 @@ class Denunciar {
 							messageReason.delete().catch(() => {});
 							if (messageReason.content.toLowerCase() === 'cancelar') {
 								channel.send(
-									'❌ Você saiu da sessão de denúncia com sucesso, você pode abrir outra a qualquer momento. ❌'
+									'<:check_error:745344787087098008> Você saiu da sessão de denúncia com sucesso, você pode abrir outra a qualquer momento. <:check_error:745344787087098008>'
 								);
 								return;
 							}
 							channel.send(
-								`❗ Agora envie links para comprovar sua denúncia (Obrigatório) ❗`
+								`<:alert:745345548424314881> Agora envie links para comprovar sua denúncia (Obrigatório) <:alert:745345548424314881>`
 							);
 
 							const filterEvidences = (m) => m.author.id === msg.author.id;
@@ -85,7 +85,9 @@ class Denunciar {
 									messageEvidences.content.includes('https://')
 								) {
 									const previewEmbed = new MessageEmbed()
-										.setTitle('📣 **Denúncia (Preview)** 📣')
+										.setTitle(
+											'<:alert:745345548424314881> **Denúncia (Preview)** <:alert:745345548424314881>'
+										)
 										.setDescription(`**\nMotivo »** ${messageReason.content}`)
 										.setThumbnail(bot.user.avatarURL())
 										.addField(
@@ -117,7 +119,9 @@ class Denunciar {
 
 										if (channelInGuild) {
 											const adminEmbedBanned = new MessageEmbed()
-												.setTitle('📣 **Denúncia ** 📣')
+												.setTitle(
+													'<:734638755859791873:745345548424314881> **Denúncia ** <:734638755859791873:745345548424314881>'
+												)
 												.setDescription(
 													`**\nMotivo »** ${messageReason.content}`
 												)
@@ -141,8 +145,8 @@ class Denunciar {
 													'\u200B'
 												)
 												.addField(
-													'Clique em ✅ para confirmar a denúncia e banir o usuário',
-													'Clique em ❌ para cancelar a denúncia assim o usuário não será banido'
+													'Clique em <:check_mark_ok:745344787317784648> para confirmar a denúncia e banir o usuário.',
+													'Clique em <:check_mark_error:745344786856280085> para cancelar a denúncia assim o usuário não será banido.'
 												)
 												.setTimestamp()
 												.setFooter(
@@ -152,16 +156,16 @@ class Denunciar {
 											channelInGuild
 												.send(adminEmbedBanned)
 												.then(async (messageForAdmin) => {
-													await messageForAdmin.react('✅');
-													await messageForAdmin.react('❌');
+													await messageForAdmin.react('745344787317784648');
+													await messageForAdmin.react('745344786856280085');
 
 													const filter = (reaction, user) => {
 														const userReacting = msg.guild.members.cache.get(
 															user.id
 														);
 														return (
-															(reaction.emoji.name === '✅' ||
-																reaction.emoji.name === '❌') &&
+															(reaction.emoji.id === '745344786856280085' ||
+																reaction.emoji.id === '745344787317784648') &&
 															user.id !== msg.author.id &&
 															checkUserHasPermission(
 																'BAN_MEMBERS',
@@ -176,8 +180,8 @@ class Denunciar {
 													);
 
 													collector.on('collect', async (reaction, user) => {
-														switch (reaction.emoji.name) {
-															case '✅':
+														switch (reaction.emoji.id) {
+															case '745344787317784648':
 																messageForAdmin.delete().catch(() => {});
 																await messageForAdmin.channel.send(
 																	'🎉 O usuário foi banido com sucesso! Obrigado pela colaboração 🎉'
@@ -189,19 +193,19 @@ class Denunciar {
 																	`Agradecemos pela sua colaboração e pedimos que continue a reportar novos possíveis infratores.`
 																);
 																await userMention.user.send(
-																	`❌ Você foi denúnciado e recebeu um ban, de nosso servidor \`${msg.channel.guild.name}\`, veja a denúncia logo abaixo ❌`
+																	`<:check_error:745344787087098008> Você foi denúnciado e recebeu um ban, de nosso servidor \`${msg.channel.guild.name}\`, veja a denúncia logo abaixo <:check_error:745344787087098008>`
 																);
 																await userMention.user.send(previewEmbed);
 																userMention.ban({
 																	reason: messageReason.content,
 																});
 																break;
-															case '❌':
+															case '745344786856280085':
 																messageForAdmin.channel.send(
 																	'🎉 O usuário foi liberado com sucesso! Obrigado pela colaboração 🎉'
 																);
 																msg.author.send(
-																	`❌ Infelizmente sua denúncia ao usuário \`${userMention.user.username}#${userMention.user.discriminator}\` foi desaprovada, caso tenha alguma dúvida entre em contato com \`${user.username}#${user.discriminator}\`. ❌`
+																	`<:check_error:745344787087098008> Infelizmente sua denúncia ao usuário \`${userMention.user.username}#${userMention.user.discriminator}\` foi desaprovada, caso tenha alguma dúvida entre em contato com \`${user.username}#${user.discriminator}\`. <:check_error:745344787087098008>`
 																);
 																msg.author.send(
 																	`Agradecemos pela sua colaboração e pedimos que continue a reportar novos possíveis infratores.`
@@ -243,6 +247,5 @@ class Denunciar {
 		};
 	}
 }
-// $denunciar {user} {motivo}
 
 module.exports = new Denunciar();

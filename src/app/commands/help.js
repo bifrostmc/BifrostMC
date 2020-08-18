@@ -4,8 +4,8 @@ import configuration from '../../../configure';
 class Help {
 	constructor() {
 		this.config = {
-			name: 'ajuda',
-			aliases: ['help', '?', 'h', 'a'],
+			name: 'help',
+			aliases: ['ajuda', '?', 'h', 'a'],
 			help:
 				'Esse comando serve para ajudar o jogador que estiver com dúvidas em comandos',
 			requiredPermissions: [],

@@ -15,48 +15,55 @@ class SetChannel {
 		this.run = async ({ msg, bot, args, prefix }) => {
 			const { channel } = msg;
 
+			async function addChannelInDatabase(function_name, name) {
+				try {
+					const channel_base = await knex('channels').where({
+						channel_id: channel.id,
+						function: function_name,
+					});
+					if (channel_base.length > 0) {
+						channel.send(
+							`⁉️ <@${msg.author.id}>, Esse canal já está recebendo as logs de ${name} ⁉️`
+						);
+						return `O canal especificado já está setado como um canal de ${name}.`;
+					}
+					await knex('channels')
+						.where({
+							function: function_name,
+						})
+						.del();
+
+					await knex('channels').insert([
+						{
+							channel_id: channel.id,
+							function: function_name,
+						},
+					]);
+
+					channel.send(
+						`🎉🎉 Parabéns! <@${msg.author.id}> Você setou esse canal para receber logs das ${name} feitas.`
+					);
+					return `O usuário ${msg.author.username} conseguiu setar o canal ${channel.id} para receber logs de ${name}.`;
+				} catch (error) {
+					console.log(error);
+					channel.send(
+						configuration.comandos.lock.possivelErro
+							.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+							.replace('$USERNAME', msg.member.user.username)
+							.replace('$USER_TAG', msg.member.user.discriminator)
+							.replace('$ERROR_MESSAGE', error.message)
+					);
+					return 'Houve um erro ao se comunicar com o banco de dados.';
+				}
+			}
+
 			if (args[0]) {
 				switch (args[0]) {
+					case 'promocoes':
+						addChannelInDatabase('promocoes', 'promoções');
+						break;
 					case 'denuncias':
-						try {
-							const channel_base = await knex('channels').where({
-								channel_id: channel.id,
-								function: 'denuncias',
-							});
-							if (channel_base.length > 0) {
-								channel.send(
-									`⁉️ <@${msg.author.id}>, Esse canal já está recebendo as logs de denúncias ⁉️`
-								);
-								return 'O canal especificado já está setado como um canal de denúncias.';
-							}
-							await knex('channels')
-								.where({
-									function: 'denuncias',
-								})
-								.del();
-
-							await knex('channels').insert([
-								{
-									channel_id: channel.id,
-									function: 'denuncias',
-								},
-							]);
-
-							channel.send(
-								`🎉🎉 Parabéns! <@${msg.author.id}> Você setou esse canal para receber logs das denúncias feitas.`
-							);
-							return `O usuário ${msg.author.username} conseguiu setar o canal ${channel.id} para receber logs de denúncias.`;
-						} catch (error) {
-							console.log(error);
-							channel.send(
-								configuration.comandos.lock.possivelErro
-									.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
-									.replace('$USERNAME', msg.member.user.username)
-									.replace('$USER_TAG', msg.member.user.discriminator)
-									.replace('$ERROR_MESSAGE', error.message)
-							);
-							return 'Houve um erro ao se comunicar com o banco de dados.';
-						}
+						addChannelInDatabase('denuncias', 'denúncias');
 						break;
 					default:
 						break;
