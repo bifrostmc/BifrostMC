@@ -30,11 +30,11 @@ class Demote {
 						const oldRoleHighestUser = userMention.roles.highest;
 
 						const embedToChannelLogDemote = new MessageEmbed()
-							.setTitle('⬇️ ** Change-log afastamento (preview) ** ⬇️')
+							.setTitle('⬇️ ** Change-log rebaixamento (preview) ** ⬇️')
 							.setColor('RANDOM')
 							.setDescription(
 								// `Registro de alterações, o usuário ${userMention} foi demotado a ${groupMention}.`
-								`Clique em 🎉 para confirmar o afastamento com anúncio.\nClique em <:check_mark_ok:745344787317784648> para confirmar o afastamento silênciosamente.\nClique em <:check_mark_error:745344786856280085> para cancelar o afasatamento.`
+								`Clique em 🎉 para confirmar o rebaixamento com anúncio.\nClique em <:check_mark_ok:745344787317784648> para confirmar o rebaixamento silênciosamente.\nClique em <:check_mark_error:745344786856280085> para cancelar o afasatamento.`
 							)
 							.setThumbnail(bot.user.avatarURL())
 							.addFields(
@@ -73,12 +73,12 @@ class Demote {
 							'🎉': async () => {
 								userMention.roles.remove(groupMention);
 								embedToChannelLogDemote
-									.setTitle('⬇️ ** Change-log afastamento ** ⬇️')
+									.setTitle('⬇️ ** Change-log rebaixamento ** ⬇️')
 									.setDescription(
 										`Registro de alterações, o usuário ${userMention} foi demotado para ${groupMention}.`
 									);
 								const channelDemote = await knex('channels').where({
-									function: 'promocoes',
+									function: 'rebaixamentos',
 								});
 								channelDemote.map((channalBase) => {
 									const channelInGuild = msg.guild.channels.cache.get(

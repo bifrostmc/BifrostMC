@@ -59,6 +59,9 @@ class SetChannel {
 
 			if (args[0]) {
 				switch (args[0]) {
+					case 'rebaixamentos':
+						addChannelInDatabase('rebaixamentos', 'rebaixamentos');
+						break;
 					case 'promocoes':
 						addChannelInDatabase('promocoes', 'promoções');
 						break;
