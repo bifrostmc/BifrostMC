@@ -3,6 +3,7 @@ import path from 'path';
 import { registerCmds } from 'register-cmd-discord';
 
 import MessageController from './app/events/MessageController';
+import MessageReactionController from './app/events/MessageReactionController';
 
 class Bot {
 	constructor() {
@@ -28,7 +29,8 @@ class Bot {
 	}
 
 	registerEvents() {
-		this.bot.on('message', (msg) => new MessageController(msg, this.bot));
+		new MessageController(this.bot);
+		new MessageReactionController(this.bot);
 	}
 
 	async login() {
