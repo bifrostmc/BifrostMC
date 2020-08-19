@@ -40,25 +40,32 @@ class SetChannel {
 						},
 					]);
 
-					channel.send(
-						`🎉🎉 Parabéns! <@${msg.author.id}> Você setou esse canal para receber logs das ${name} feitas.`
-					);
+					channel
+						.send(
+							`🎉🎉 Parabéns! <@${msg.author.id}> Você setou esse canal para receber logs das ${name} feitas.`
+						)
+						.then((msg) => msg.delete({ timeout: 5000 }));
 					return `O usuário ${msg.author.username} conseguiu setar o canal ${channel.id} para receber logs de ${name}.`;
 				} catch (error) {
 					console.log(error);
-					channel.send(
-						configuration.comandos.lock.possivelErro
-							.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
-							.replace('$USERNAME', msg.member.user.username)
-							.replace('$USER_TAG', msg.member.user.discriminator)
-							.replace('$ERROR_MESSAGE', error.message)
-					);
+					channel
+						.send(
+							configuration.comandos.lock.possivelErro
+								.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+								.replace('$USERNAME', msg.member.user.username)
+								.replace('$USER_TAG', msg.member.user.discriminator)
+								.replace('$ERROR_MESSAGE', error.message)
+						)
+						.then((msg) => msg.delete({ timeout: 5000 }));
 					return 'Houve um erro ao se comunicar com o banco de dados.';
 				}
 			}
 
 			if (args[0]) {
 				switch (args[0]) {
+					case 'sugestoes':
+						addChannelInDatabase('sugestoes', 'sugestões');
+						break;
 					case 'rebaixamentos':
 						addChannelInDatabase('rebaixamentos', 'rebaixamentos');
 						break;
@@ -76,12 +83,14 @@ class SetChannel {
 						break;
 				}
 			} else {
-				channel.send(
-					`Sintaxe incorreta, porfavor use dessa forma ${prefix}setchannel {tipo de canal}`
-				);
-				channel.send(
-					`Para saber os tipos de canais digite ${prefix}setchannel list`
-				);
+				channel
+					.send(
+						`Sintaxe incorreta, porfavor use dessa forma ${prefix}setchannel {tipo de canal}`
+					)
+					.then((msg) => msg.delete({ timeout: 5000 }));
+				channel
+					.send(`Para saber os tipos de canais digite ${prefix}setchannel list`)
+					.then((msg) => msg.delete({ timeout: 5000 }));
 			}
 		};
 	}

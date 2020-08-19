@@ -111,7 +111,9 @@ class Denunciar {
 											bot.user.avatarURL()
 										);
 
-									channel.send(previewEmbed);
+									channel
+										.send(previewEmbed)
+										.then((msg) => msg.delete({ timeout: 5000 }));
 									channel_base.map((channelComplaint) => {
 										const channelInGuild = msg.guild.channels.cache.get(
 											channelComplaint.channel_id
