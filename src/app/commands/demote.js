@@ -4,13 +4,13 @@ import moment from 'moment';
 import knex from '../database';
 import configuration from '../../../configure';
 
-class Promote {
+class Demote {
 	constructor() {
 		this.config = {
-			name: 'promote',
-			aliases: ['promover'],
+			name: 'demote',
+			aliases: ['demotar'],
 			help:
-				'Com esse comando os administradores pode adicionar cargos a um membro.',
+				'Com esse comando os administradores pode remover cargos de um membro.',
 			requiredPermissions: ['MANAGE_ROLES'],
 		};
 		this.run = async ({ msg, args, prefix, bot }) => {
@@ -27,28 +27,25 @@ class Promote {
 
 				if (msg.member.roles.highest.rawPosition > groupMention.rawPosition) {
 					try {
-						const embedToChannelLogPromote = new MessageEmbed()
-							.setTitle('⬆️ ** Change-log Promoção (preview) ** ⬆️')
+						const oldRoleHighestUser = userMention.roles.highest;
+
+						const embedToChannelLogDemote = new MessageEmbed()
+							.setTitle('⬇️ ** Change-log afastamento (preview) ** ⬇️')
 							.setColor('RANDOM')
 							.setDescription(
-								// `Registro de alterações, o usuário ${userMention} foi promovido a ${groupMention}.`
-								`Clique em 🎉 para confirmar a promoção com anúncio.\nClique em <:check_mark_ok:745344787317784648> para confirmar a promoção silênciosamente.\nClique em <:check_mark_error:745344786856280085> para cancelar a promoção.`
+								// `Registro de alterações, o usuário ${userMention} foi demotado a ${groupMention}.`
+								`Clique em 🎉 para confirmar o afastamento com anúncio.\nClique em <:check_mark_ok:745344787317784648> para confirmar o afastamento silênciosamente.\nClique em <:check_mark_error:745344786856280085> para cancelar o afasatamento.`
 							)
 							.setThumbnail(bot.user.avatarURL())
 							.addFields(
 								{
 									name: `\u200B`,
-									value: `**Cargo antigo » **\`${userMention.roles.highest.name}\``,
+									value: `**Cargo retirado » **\`${oldRoleHighestUser.name}\``,
 									inline: true,
 								},
 								{
-									name: `\u200B`,
-									value: `**Cargo atual » **\`${groupMention.name}\``,
-									inline: true,
-								},
-								{
-									name: `**Usuário promovido » **\`${userMention.user.tag}\``,
-									value: `**Promovido por » **\`${msg.author.tag}\``,
+									name: `**Usuário rebaixado » **\`${userMention.user.tag}\``,
+									value: `**Rebaixado por » **\`${msg.author.tag}\``,
 									inline: false,
 								},
 								{
@@ -64,53 +61,57 @@ class Promote {
 								bot.user.avatarURL()
 							);
 
-						const messagePromote = await msg.channel.send(
-							embedToChannelLogPromote
+						const messageDemote = await msg.channel.send(
+							embedToChannelLogDemote
 						);
 
-						await messagePromote.react('🎉');
-						await messagePromote.react('745344787317784648');
-						await messagePromote.react('745344786856280085');
+						await messageDemote.react('🎉');
+						await messageDemote.react('745344787317784648');
+						await messageDemote.react('745344786856280085');
 
 						const functionsCollection = {
 							'🎉': async () => {
-								userMention.roles.add(groupMention);
-								embedToChannelLogPromote
-									.setTitle('⬆️ ** Change-log Promoção ** ⬆️')
+								userMention.roles.remove(groupMention);
+								embedToChannelLogDemote
+									.setTitle('⬇️ ** Change-log afastamento ** ⬇️')
 									.setDescription(
-										`Registro de alterações, o usuário ${userMention} foi promovido a ${groupMention}.`
+										`Registro de alterações, o usuário ${userMention} foi demotado para ${groupMention}.`
 									);
-								const channelPromote = await knex('channels').where({
+								const channelDemote = await knex('channels').where({
 									function: 'promocoes',
 								});
-								channelPromote.map((channalBase) => {
+								channelDemote.map((channalBase) => {
 									const channelInGuild = msg.guild.channels.cache.get(
 										channalBase.channel_id
 									);
 
-									channelInGuild.send(embedToChannelLogPromote);
+									channelInGuild.send(embedToChannelLogDemote);
 								});
-								embedToChannelLogPromote
-									.setTitle('🎉 ** Parabéns você recebeu um UP ** 🎉')
+								embedToChannelLogDemote
+									.setTitle(
+										'<:alert:745345548424314881> ** Que pena você recebeu um DOWN ** <:alert:745345548424314881>'
+									)
 									.setDescription(
-										`Registro de alterações, você foi promovido a ${groupMention.name}.`
+										`Registro de alterações, você foi demotado para ${groupMention.name}.`
 									);
-								userMention.user.send(embedToChannelLogPromote);
+								userMention.user.send(embedToChannelLogDemote);
 							},
 							'745344787317784648': () => {
-								userMention.roles.add(groupMention);
+								userMention.roles.remove(groupMention);
 
-								embedToChannelLogPromote
-									.setTitle('🎉 ** Parabéns você recebeu um UP ** 🎉')
+								embedToChannelLogDemote
+									.setTitle(
+										'<:alert:745345548424314881> ** Que pena você recebeu um DOWN ** <:alert:745345548424314881>'
+									)
 									.setDescription(
-										`Registro de alterações, você foi promovido a ${groupMention.name}.`
+										`Registro de alterações, você foi demotado a ${groupMention.name}.`
 									);
-								userMention.user.send(embedToChannelLogPromote);
+								userMention.user.send(embedToChannelLogDemote);
 							},
 							'745344786856280085': () => {
 								msg.channel
 									.send(
-										'<:check_error:745344787087098008> Promoção cancelada com sucesso! <:check_error:745344787087098008>'
+										'<:check_error:745344787087098008> Afastamento cancelado com sucesso! <:check_error:745344787087098008>'
 									)
 									.then((msg) => msg.delete({ timeout: 5000 }));
 							},
@@ -120,12 +121,12 @@ class Promote {
 							!!functionsCollection[reaction.emoji.id || reaction.emoji.name] &&
 							user.id === msg.author.id;
 
-						const collector = messagePromote.createReactionCollector(filter);
+						const collector = messageDemote.createReactionCollector(filter);
 
 						collector.on('collect', async (reaction, user) => {
 							const emoji = reaction.emoji.id || reaction.emoji.name;
 
-							messagePromote.delete().catch(() => {});
+							messageDemote.delete().catch(() => {});
 							await functionsCollection[emoji]();
 						});
 					} catch (error) {
@@ -144,7 +145,7 @@ class Promote {
 				} else {
 					msg.channel
 						.send(
-							'<:check_error:745344787087098008> Desculpe você não pode adicionar um cargo maior ou igual ao seu. <:check_error:745344787087098008>'
+							'<:check_error:745344787087098008> Desculpe você não pode retirar um cargo maior ou igual ao seu. <:check_error:745344787087098008>'
 						)
 						.then((msg) => msg.delete({ timeout: 15000 }));
 					return 'O usuário não pode promover porque ele tem role menor que a do usuário mencionado.';
@@ -152,7 +153,7 @@ class Promote {
 			} else {
 				msg.channel
 					.send(
-						`⁉️ Sintaxe incorreta, use dessa forma \`${prefix}promote {@user/user_id} {@cargo/cargo_id}\` ⁉️`
+						`⁉️ Sintaxe incorreta, use dessa forma \`${prefix}demote {@user/user_id} {@cargo/cargo_id}\` ⁉️`
 					)
 					.then((msg) => msg.delete({ timeout: 15000 }));
 				return 'O usuário digitou o comando em um sintaxe incorreta.';
@@ -163,4 +164,4 @@ class Promote {
 
 // $promover {menção ou id} {menção de cargo}
 
-module.exports = new Promote();
+module.exports = new Demote();
