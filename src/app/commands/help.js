@@ -71,14 +71,21 @@ class Help {
 							.replace('$COMANDO_MENCIONADO', args[0])
 					)
 					.addField('\u200B', '\u200B');
-				bot.commands.map((command) => {
-					responseMessage.addField(
-						prefix + command.config.name,
-						command.config.help,
-						true
-					);
-					return command;
-				});
+
+				bot.commands
+					.sort(function (a, b) {
+						if (a.config.name < b.config.name) return -1;
+						if (a.config.name > b.config.name) return 1;
+						return 0;
+					})
+					.map((command) => {
+						responseMessage.addField(
+							prefix + command.config.name,
+							command.config.help,
+							true
+						);
+						return command;
+					});
 				responseMessage.addField('\u200B', '\u200B');
 			}
 
