@@ -69,6 +69,10 @@ class SetChannel {
 						addChannelInDatabase('denuncias', 'denúncias');
 						break;
 					default:
+						channel.send(`Nenhuma sincronização de canal feita com esse nome.`);
+						channel.send(
+							`Para saber os tipos de canais digite ${prefix}setchannel list`
+						);
 						break;
 				}
 			} else {
