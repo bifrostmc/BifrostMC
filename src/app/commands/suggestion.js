@@ -120,31 +120,19 @@ class Suggestion {
 									embedForAdminMessage
 								);
 
-								try {
-									await knex('suggestions').insert([
-										{
-											guild_id: msg.guild.id,
-											channel_id: channelComplaint.channel_id,
-											message_id: embedToAdmin.id,
-											author_id: msg.author.id,
-										},
-									]);
+								await knex('suggestions').insert([
+									{
+										guild_id: msg.guild.id,
+										channel_id: channelComplaint.channel_id,
+										message_id: embedToAdmin.id,
+										author_id: msg.author.id,
+									},
+								]);
 
-									await embedToAdmin.react('745344787317784648');
-									await embedToAdmin.react('745344786856280085');
+								await embedToAdmin.react('745344787317784648');
+								await embedToAdmin.react('745344786856280085');
 
-									MessageReactionController.updateCache();
-								} catch (error) {
-									console.log(error);
-									embedToAdmin.delete();
-									channel.send(
-										configuration.comandos.lock.possivelErro
-											.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
-											.replace('$USERNAME', msg.member.user.username)
-											.replace('$USER_TAG', msg.member.user.discriminator)
-											.replace('$ERROR_MESSAGE', error.message)
-									);
-								}
+								MessageReactionController.updateCache();
 							} catch (error) {
 								console.log(error);
 								channel.send(
