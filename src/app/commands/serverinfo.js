@@ -26,21 +26,29 @@ class ServerInfo {
           .setDescription(
             `Logo abaixo está as informações que eu encontrei sobre esse servidor.`
           )
-          .addField(`\u200B`, `**Nome » ** \`${msg.guild.name}\``, true)
-          .addField(`\u200B`, `**ID » **\`${msg.guild.id}\``, true)
           .addField(
             `\u200B`,
-            `**Membros » ** \`${msg.guild.memberCount}\``,
+            `**Nome » ** \`\`\`yaml\n${msg.guild.name}\`\`\``,
             true
           )
           .addField(
             `\u200B`,
-            `**Cargos » ** \`${msg.guild.roles.cache.size}\``,
+            `**ID » ** \`\`\`yaml\n${msg.guild.id}\`\`\``,
             true
           )
           .addField(
             `\u200B`,
-            `**Canais Text/voice » ** \`${
+            `**Membros » ** \`\`\`yaml\n${msg.guild.memberCount}\`\`\``,
+            true
+          )
+          .addField(
+            `\u200B`,
+            `**Cargos » ** \`\`\`yaml\n${msg.guild.roles.cache.size}\`\`\``,
+            true
+          )
+          .addField(
+            `\u200B`,
+            `**Canais Text/voice » ** \`\`\`yaml\n${
               msg.guild.channels.cache.filter(
                 (channelCount) => channelCount.type === 'text'
               ).size
@@ -48,10 +56,14 @@ class ServerInfo {
               msg.guild.channels.cache.filter(
                 (channelCount) => channelCount.type === 'voice'
               ).size
-            }\``,
+            }\`\`\``,
             true
           )
-          .addField(`\u200B`, `**Região » ** \`${msg.guild.region}\``, true)
+          .addField(
+            `\u200B`,
+            `**Região » ** \`\`\`yaml\n${msg.guild.region}\`\`\``,
+            true
+          )
           .addField(
             `\u200B`,
             `**Criador » ** \`\`\`diff\n- ${msg.guild.owner.user.tag}\`\`\``,
@@ -59,7 +71,7 @@ class ServerInfo {
           )
           .addField(
             `\u200B`,
-            `**Cargos » **\`\`\`ini\n[${roles.array().join(', ')}]\`\`\``,
+            `**Cargos » ** \`\`\`ini\n[${roles.array().join(', ')}]\`\`\``,
             false
           )
           .setTimestamp()
