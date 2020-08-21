@@ -168,7 +168,7 @@ class UserInfo {
                   .replace('$USER_TAG', msg.member.user.discriminator)
                   .replace('$ERROR_MESSAGE', error.message)
               );
-              return `Houve um erro ao desbloquear o canal ${msg.channel.id}`;
+              return `Houve um erro ao enviar mensagem ao canal ${msg.channel.id}`;
             }
           },
         };
@@ -192,7 +192,7 @@ class UserInfo {
             .replace('$USER_TAG', msg.member.user.discriminator)
             .replace('$ERROR_MESSAGE', error.message)
         );
-        return `Houve um erro ao desbloquear o canal ${msg.channel.id}`;
+        return `Houve um erro ao enviar mensagem ao canal ${msg.channel.id}`;
       }
     };
   }
