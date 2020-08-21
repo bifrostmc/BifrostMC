@@ -56,7 +56,7 @@ class UserInfo {
           .setTitle(
             `📃 ** ${
               args.length > 0 ? user.username : 'Suas'
-            } informações ² ** 📃`
+            } informações ¹ ** 📃`
           )
           .setAuthor(`${user.username} infos`, user.avatarURL)
           .setThumbnail(user.avatarURL)
