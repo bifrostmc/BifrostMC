@@ -11,51 +11,93 @@ class UserInfo {
       requiredPermissions: [],
     };
 
-    this.run = async ({ msg, bot }) => {
+    this.run = async ({ msg, bot, args }) => {
+      let user = {};
+
+      if (args.length > 0) {
+        const userMention =
+          msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
+
+        if (userMention) {
+          user = {
+            avatarURL: userMention.user.avatarURL(),
+            username: userMention.user.username,
+            discriminator: userMention.user.discriminator,
+            id: userMention.user.id,
+            presence_status: userMention.user.presence.status,
+            joinedAt: userMention.joinedAt,
+            createdAt: userMention.user.createdAt,
+            roles: userMention.roles,
+          };
+        } else {
+          msg.channel
+            .send(
+              `⁉️ Sintaxe incorreta, use dessa forma \`${prefix}promote {@user/user_id} {@cargo/cargo_id}\` ⁉️`
+            )
+            .then((msg) => msg.delete({ timeout: 15000 }));
+          return 'O usuário digitou o comando em um sintaxe incorreta.';
+        }
+      } else {
+        user = {
+          avatarURL: msg.author.avatarURL(),
+          username: msg.author.username,
+          discriminator: msg.author.discriminator,
+          id: msg.author.id,
+          presence_status: msg.author.presence.status,
+          joinedAt: msg.member.joinedAt,
+          createdAt: msg.author.createdAt,
+          roles: msg.member.roles,
+        };
+      }
+
       try {
         let userInfosEmbed = new MessageEmbed()
           .setColor('RANDOM')
-          .setTitle('📃 ** Suas informações ¹ ** 📃')
-          .setAuthor(`${msg.author.username} infos`, msg.author.avatarURL())
-          .setThumbnail(msg.author.avatarURL())
+          .setTitle(
+            `📃 ** ${
+              args.length > 0 ? user.username : 'Suas'
+            } informações ² ** 📃`
+          )
+          .setAuthor(`${user.username} infos`, user.avatarURL)
+          .setThumbnail(user.avatarURL)
           .setDescription(
-            'Logo abaixo está as informações principais que eu tenho sobre o sua conta, considerando suas informações como usuário e membro.'
+            `Logo abaixo está as informações principais que eu tenho sobre ${
+              args.length > 0
+                ? `a conta do usuário ${user.username}`
+                : 'o sua conta'
+            }, considerando informações como usuário e membro.`
           )
           .addField(
             `\u200B`,
-            `**Nome » **\`\`\`yaml\n${msg.author.username}\`\`\``,
+            `**Nome » **\`\`\`yaml\n${user.username}\`\`\``,
             true
           )
           .addField(
             `\u200B`,
-            `**Tag » **\`\`\`yaml\n${msg.author.discriminator}\`\`\``,
+            `**Tag » **\`\`\`yaml\n${user.discriminator}\`\`\``,
+            true
+          )
+          .addField(`\u200B`, `**ID » **\`\`\`yaml\n${user.id}\`\`\``, true)
+          .addField(
+            `\u200B`,
+            `**Cargo » **\`\`\`yaml\n${user.roles.highest.name}\`\`\``,
             true
           )
           .addField(
             `\u200B`,
-            `**ID » **\`\`\`yaml\n${msg.author.id}\`\`\``,
+            `**Status » **\`\`\`yaml\n${user.presence_status}\`\`\``,
             true
           )
           .addField(
             `\u200B`,
-            `**Cargo » **\`\`\`yaml\n${msg.member.roles.highest.name}\`\`\``,
+            `**Entrada » **\`\`\`yaml\n${moment(user.joinedAt).format(
+              'HH:mm:ss - DD/MM/YYYY'
+            )}\`\`\``,
             true
           )
           .addField(
             `\u200B`,
-            `**Status » **\`\`\`yaml\n${msg.author.presence.status}\`\`\``,
-            true
-          )
-          .addField(
-            `\u200B`,
-            `**Ultima entrada » **\`\`\`yaml\n${moment(
-              msg.author.joinedAt
-            ).format('HH:mm:ss - DD/MM/YYYY')}\`\`\``,
-            true
-          )
-          .addField(
-            `\u200B`,
-            `**Criado em » **\`\`\`yaml\n${moment(msg.author.createdAt).format(
+            `**Criado em » **\`\`\`yaml\n${moment(user.createdAt).format(
               'HH:mm:ss - DD/MM/YYYY'
             )}\`\`\``,
             true
@@ -75,15 +117,23 @@ class UserInfo {
             msgInfos.reactions.removeAll();
             const embedInfosPageTwo = new MessageEmbed()
               .setColor('RANDOM')
-              .setTitle('📃 ** Suas informações ² ** 📃')
-              .setAuthor(`${msg.author.username} infos`, msg.author.avatarURL())
-              .setThumbnail(msg.author.avatarURL())
+              .setTitle(
+                `📃 ** ${
+                  args.length > 0 ? user.username : 'Suas'
+                } informações ² ** 📃`
+              )
+              .setAuthor(`${user.username} infos`, user.avatarURL)
+              .setThumbnail(user.avatarURL)
               .setDescription(
-                'Logo abaixo está as informações secundário que eu tenho sobre o sua conta, considerando suas informações como usuário e membro.'
+                `Logo abaixo está as informações secundária que eu tenho sobre ${
+                  args.length > 0
+                    ? `a conta do usuário ${user.username}`
+                    : 'o sua conta'
+                }, considerando informações como usuário e membro.`
               )
               .addField(
                 `\u200B`,
-                `**Cargos » ** [${msg.member.roles.cache.array().join(', ')}]`,
+                `**Cargos » ** [${user.roles.cache.array().join(', ')}]`,
                 true
               )
               .setTimestamp()
@@ -107,7 +157,7 @@ class UserInfo {
                 if (functionsCollection[emoji]) {
                   await functionsCollection[emoji]();
                 } else {
-                  this.run({ msg, bot });
+                  this.run({ msg, bot, args });
                 }
               });
             } catch (error) {
