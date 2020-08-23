@@ -5,7 +5,7 @@ import knex from '../database';
 import configuration from '../../../configure';
 
 import checkUserHasPermission from '../utils/checkUserHasPermission';
-import MessageReactionController from '../events/MessageReactionController';
+import CacheController from '../events/CacheController';
 
 class Suggestion {
 	constructor() {
@@ -58,7 +58,6 @@ class Suggestion {
 							.then((msg) => msg.delete({ timeout: 5000 }));
 						return;
 					}
-					const description = `**Sugestão » ** \n\`\`\`yaml\n${messageReason.content}\`\`\``;
 
 					const previewEmbed = new MessageEmbed()
 						.setTitle(
@@ -132,7 +131,7 @@ class Suggestion {
 								await embedToAdmin.react('745344787317784648');
 								await embedToAdmin.react('745344786856280085');
 
-								MessageReactionController.updateCache();
+								CacheController.updateCache(bot, 'suggestions');
 							} catch (error) {
 								console.log(error);
 								channel.send(

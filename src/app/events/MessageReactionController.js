@@ -1,19 +1,8 @@
-import checkUserHasPermission from '../utils/checkUserHasPermission';
-import knex from '../database/';
-
-let cacheChannels = [];
-let cacheSuggestions = [];
+import knex from '../database';
 
 class MessageReactionController {
-	static async updateCache() {
-		cacheChannels = await knex('channels');
-		cacheSuggestions = await knex('suggestions');
-	}
-
 	constructor(bot) {
 		this.bot = bot;
-
-		MessageReactionController.updateCache();
 
 		bot.on('raw', async (datas) => {
 			if (
@@ -24,9 +13,8 @@ class MessageReactionController {
 
 			if (
 				datas.t === 'MESSAGE_REACTION_ADD' &&
-				cacheChannels.find(
-					({ channel_id }) => channel_id === datas.d.channel_id
-				)
+				bot.cache_control.channels.get('sugestoes').channel_id ===
+					datas.d.channel_id
 			) {
 				await this.suggestions(datas);
 			}
@@ -34,30 +22,24 @@ class MessageReactionController {
 	}
 
 	async suggestions(datas) {
-		const { guild_id, channel_id, message_id } = datas.d;
+		const { message_id } = datas.d;
 
-		const suggestionId = cacheSuggestions.findIndex(
-			(suggestionPreview) =>
-				suggestionPreview.guild_id === guild_id &&
-				suggestionPreview.channel_id === channel_id &&
-				suggestionPreview.message_id === message_id
-		);
-		const suggestion = cacheSuggestions[suggestionId];
+		const suggestion = this.bot.cache_control.suggestions.get(message_id);
 
 		if (!suggestion) return;
 
-		const guild = this.bot.guilds.cache.get(suggestion.guild_id),
-			member = guild.members.cache.get(suggestion.author_id);
+		const guild = this.bot.guilds.cache.get(suggestion.guild_id);
+		const member = guild.members.cache.get(suggestion.author_id);
 
 		if (datas.d.user_id === suggestion.author_id || member.user.bot) return;
 
-		const channel = guild.channels.cache.get(suggestion.channel_id),
-			message = await channel.messages.fetch(suggestion.message_id);
+		const channel = guild.channels.cache.get(suggestion.channel_id);
+		const message = await channel.messages.fetch(suggestion.message_id);
 
 		const emoji = datas.d.emoji.id || datas.d.emoji.name;
 
 		const functionsCollection = {
-			'745344787317784648': async (member) => {
+			'745344787317784648': async () => {
 				await member.send(
 					`🎉 Parabéns sua sugestão abaixo foi aprovada, pelo admnistrador \`${member.user.tag}\`. 🎉`
 				);
@@ -68,14 +50,14 @@ class MessageReactionController {
 					)
 					.then((msg) => msg.delete({ timeout: 15000 }));
 				message.delete();
-				cacheSuggestions.slice(1, suggestionId);
+				this.bot.cache_control.suggestions.delete(message_id);
 				await knex('suggestions')
 					.where({
 						id: suggestion.id,
 					})
 					.del();
 			},
-			'745344786856280085': async (member) => {
+			'745344786856280085': async () => {
 				await member.send(
 					`<:alert:745345548424314881> Infelizmente sua sugestão abaixo foi reprovado, pelo admnistrador \`${member.user.tag}\`. <:alert:745345548424314881>`
 				);
@@ -86,7 +68,7 @@ class MessageReactionController {
 					)
 					.then((msg) => msg.delete({ timeout: 15000 }));
 				message.delete();
-				cacheSuggestions.slice(1, suggestionId);
+				this.bot.cache_control.suggestions.delete(message_id);
 				await knex('suggestions')
 					.where({
 						id: suggestion.id,
@@ -96,7 +78,7 @@ class MessageReactionController {
 		};
 
 		const functionExecution = functionsCollection[emoji];
-		functionExecution(member);
+		functionExecution();
 	}
 }
 

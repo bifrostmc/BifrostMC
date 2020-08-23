@@ -2,6 +2,7 @@ import { Client, Collection } from 'discord.js';
 import path from 'path';
 import { registerCmds } from 'register-cmd-discord';
 
+import CacheController from './app/events/CacheController';
 import MessageController from './app/events/MessageController';
 import MessageReactionController from './app/events/MessageReactionController';
 import UnbannedTimeoutController from './app/events/UnbannedTimeoutController';
@@ -30,6 +31,7 @@ class Bot {
 	}
 
 	registerEvents() {
+		CacheController.updateCache(this.bot);
 		new MessageController(this.bot);
 		new MessageReactionController(this.bot);
 		new UnbannedTimeoutController(this.bot);
