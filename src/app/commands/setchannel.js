@@ -11,7 +11,7 @@ class SetChannel {
 			requiredPermissions: ['MANAGE_CHANNELS'],
 		};
 
-		this.run = async ({ msg, bot, args, prefix }) => {
+		this.run = async ({ msg, args, prefix }) => {
 			const { channel } = msg;
 
 			async function addChannelInDatabase(function_name, name) {
@@ -62,6 +62,9 @@ class SetChannel {
 
 			if (args[0]) {
 				switch (args[0]) {
+					case 'banned':
+						addChannelInDatabase('banned', 'banimentos');
+						break;
 					case 'sugestoes':
 						addChannelInDatabase('sugestoes', 'sugestões');
 						break;

@@ -11,6 +11,10 @@ const cache = [
 		name: 'suggestions',
 		key: 'message_id',
 	},
+	{
+		name: 'banned',
+		key: 'user_banned_id',
+	},
 ];
 
 class CacheController {
@@ -18,7 +22,7 @@ class CacheController {
 		if (!nameCache) {
 			bot.cache_control = {};
 
-			cache.map(async ({ name, key }) => {
+			const response = await cache.map(async ({ name, key }) => {
 				bot.cache_control[name] = new Collection();
 
 				const cacheItems = await knex(name);
@@ -26,24 +30,27 @@ class CacheController {
 				cacheItems.map((cacheItemSigle) =>
 					bot.cache_control[name].set(cacheItemSigle[key], cacheItemSigle)
 				);
+
+				return cacheItems;
 			});
-		} else {
-			const cacheItem = cache.find(
-				(cacheFindingItem) => cacheFindingItem.name === nameCache
-			);
-			if (!cacheItem) return;
-			bot.cache_control[nameCache] = new Collection();
-
-			const cacheItems = await knex(nameCache);
-
-			cacheItems.map((cacheItemSigle) =>
-				bot.cache_control[nameCache].set(
-					cacheItemSigle[cacheItem.key],
-					cacheItemSigle
-				)
-			);
+			await Promise.all(response);
+			return true;
 		}
-		console.log(bot.cache_control);
+		const cacheItem = cache.find(
+			(cacheFindingItem) => cacheFindingItem.name === nameCache
+		);
+		if (!cacheItem) return false;
+		bot.cache_control[nameCache] = new Collection();
+
+		const cacheItems = await knex(nameCache);
+
+		cacheItems.map((cacheItemSigle) =>
+			bot.cache_control[nameCache].set(
+				cacheItemSigle[cacheItem.key],
+				cacheItemSigle
+			)
+		);
+		return true;
 	}
 }
 

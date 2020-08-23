@@ -11,9 +11,11 @@ class Bot {
 	constructor() {
 		this.bot = new Client();
 
-		this.registerCommands();
-		this.registerEvents();
-		this.login();
+		(async () => {
+			await this.login();
+			this.registerCommands();
+			this.registerEvents();
+		})();
 	}
 
 	registerCommands() {
@@ -30,11 +32,11 @@ class Bot {
 		this.bot.aliases = als;
 	}
 
-	registerEvents() {
-		CacheController.updateCache(this.bot);
+	async registerEvents() {
+		await CacheController.updateCache(this.bot);
+		new UnbannedTimeoutController(this.bot);
 		new MessageController(this.bot);
 		new MessageReactionController(this.bot);
-		new UnbannedTimeoutController(this.bot);
 	}
 
 	async login() {

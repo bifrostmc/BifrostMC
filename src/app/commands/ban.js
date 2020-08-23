@@ -65,21 +65,39 @@ class Ban {
 							bot.user.avatarURL()
 						);
 
-					await knex('banned').insert([
-						{
-							guild_id: msg.channel.guild.id,
-							user_banned_id: banMember.user.id,
-							author_id: msg.author.id,
-							due_date: moment().add(args[1], args[2]).valueOf(),
-							is_due_date: args.length > 1,
-						},
-					]);
-
 					await banMember.ban({ reason: banReason.content });
 					if (args.length > 1) {
+						await knex('banned').insert([
+							{
+								guild_id: msg.channel.guild.id,
+								user_banned_id: banMember.user.id,
+								author_id: msg.author.id,
+								due_date: moment().add(args[1], args[2]).valueOf(),
+								is_due_date: args.length > 1,
+							},
+						]);
 						registerUnbannedTimeout(banMember.user.id);
 					}
-					await msg.channel.send(banEmbedNoticie);
+					const msgBanned = await msg.channel.send(banEmbedNoticie);
+					msgBanned.delete({ timeout: 5000 });
+
+					banEmbedNoticie.setTitle('Punição aplicada!');
+
+					if (bot.cache_control.channels) {
+						bot.cache_control.channels
+							.filter(
+								(channelFiltering) => channelFiltering.function === 'banned'
+							)
+							.map((channelBanned) => {
+								const channelInGuild = msg.guild.channels.cache.get(
+									channelBanned.channel_id
+								);
+
+								channelInGuild.send(banEmbedNoticie);
+
+								return channelBanned;
+							});
+					}
 				} catch (error) {
 					msg.reply(`${error}`);
 				}

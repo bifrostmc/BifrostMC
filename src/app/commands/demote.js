@@ -113,7 +113,7 @@ class Demote {
 									.send(
 										'<:check_error:745344787087098008> Afastamento cancelado com sucesso! <:check_error:745344787087098008>'
 									)
-									.then((msg) => msg.delete({ timeout: 5000 }));
+									.then((msgCancel) => msgCancel.delete({ timeout: 5000 }));
 							},
 						};
 
