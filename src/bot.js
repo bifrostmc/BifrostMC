@@ -4,6 +4,7 @@ import { registerCmds } from 'register-cmd-discord';
 
 import MessageController from './app/events/MessageController';
 import MessageReactionController from './app/events/MessageReactionController';
+import UnbannedTimeoutController from './app/events/UnbannedTimeoutController';
 
 class Bot {
 	constructor() {
@@ -31,6 +32,7 @@ class Bot {
 	registerEvents() {
 		new MessageController(this.bot);
 		new MessageReactionController(this.bot);
+		new UnbannedTimeoutController(this.bot);
 	}
 
 	async login() {

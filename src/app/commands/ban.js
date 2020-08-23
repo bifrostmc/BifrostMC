@@ -52,7 +52,7 @@ class Ban {
 						.addField(
 							'\u200B',
 							`**Duração »** \`${
-								args.length === 1
+								args.length <= 1
 									? 'Permanente'
 									: moment()
 											.add(args[1], args[2])
@@ -71,11 +71,14 @@ class Ban {
 							user_banned_id: banMember.user.id,
 							author_id: msg.author.id,
 							due_date: moment().add(args[1], args[2]).valueOf(),
+							is_due_date: args.length > 1,
 						},
 					]);
 
 					await banMember.ban({ reason: banReason.content });
-					registerUnbannedTimeout(banMember.user.id);
+					if (args.length > 1) {
+						registerUnbannedTimeout(banMember.user.id);
+					}
 					await msg.channel.send(banEmbedNoticie);
 				} catch (error) {
 					msg.reply(`${error}`);
