@@ -4,7 +4,7 @@ import Web from './web';
 
 config();
 
-(() => {
-	new Bot();
-	new Web(process.env.PORT || 3333);
-})();
+export default {
+	Bot: new Bot(),
+	Web: new Web(process.env.PORT || 3333),
+};

@@ -1,6 +1,7 @@
 import { MessageEmbed } from 'discord.js';
 import moment from 'moment';
 import configuration from '../../../configure';
+import Emojis from '../utils/emojis';
 
 class ServerInfo {
   constructor() {
@@ -17,38 +18,40 @@ class ServerInfo {
       try {
         let userInfosEmbed = new MessageEmbed()
           .setColor('RANDOM')
-          .setTitle(`📃 ** Informações do servidor ** 📃`)
+          .setTitle(
+            `<:caderneta:746814240513589299> ** Sobre nossa comunidade! **`
+          )
           .setAuthor(
-            `${msg.guild.name} infos`,
+            `Informações | ${msg.guild.name}`,
             msg.guild.iconURL() || bot.user.avatarURL()
           )
           .setThumbnail(msg.guild.iconURL() || bot.user.avatarURL())
           .setDescription(
-            `Logo abaixo está as informações que eu encontrei sobre esse servidor.`
+            `Irei descrever as informações encontradas em ${msg.guild.name}. Lembre-se de que elas serão alteradas frequentemente! Com base nas informações atuais presentes no servidor.`
           )
           .addField(
             `\u200B`,
-            `**Nome » ** \`\`\`yaml\n${msg.guild.name}\`\`\``,
+            `<:displaytext:746814240396148757> **Nome » ** \`\`\`yaml\n${msg.guild.name}\`\`\``,
             true
           )
           .addField(
             `\u200B`,
-            `**ID » ** \`\`\`yaml\n${msg.guild.id}\`\`\``,
+            `<:id_vector:746814239875792957> **ID » ** \`\`\`yaml\n${msg.guild.id}\`\`\``,
             true
           )
           .addField(
             `\u200B`,
-            `**Membros » ** \`\`\`yaml\n${msg.guild.memberCount}\`\`\``,
+            `<:user:746814240605733014> **Membros » ** \`\`\`yaml\n${msg.guild.memberCount}\`\`\``,
             true
           )
           .addField(
             `\u200B`,
-            `**Cargos » ** \`\`\`yaml\n${msg.guild.roles.cache.size}\`\`\``,
+            `<:nuvem_download:746815405355696178> **Cargos » ** \`\`\`yaml\n${msg.guild.roles.cache.size}\`\`\``,
             true
           )
           .addField(
             `\u200B`,
-            `**Canais Text/voice » ** \`\`\`yaml\n${
+            `<:caixa:746814240211337276> **Canais Text/voice » ** \`\`\`yaml\n${
               msg.guild.channels.cache.filter(
                 (channelCount) => channelCount.type === 'text'
               ).size
@@ -61,7 +64,9 @@ class ServerInfo {
           )
           .addField(
             `\u200B`,
-            `**Região » ** \`\`\`yaml\n${msg.guild.region}\`\`\``,
+            `${Emojis.get(msg.guild.region)} **Região » ** \`\`\`yaml\n${
+              msg.guild.region
+            }\`\`\``,
             true
           )
           .addField(
