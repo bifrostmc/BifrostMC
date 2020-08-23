@@ -1,4 +1,3 @@
-import { MessageEmbed } from 'discord.js';
 import knex from '../database';
 import configuration from '../../../configure';
 
