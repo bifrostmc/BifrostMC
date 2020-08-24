@@ -106,7 +106,7 @@ class SetChannel {
 					listChannels.forEach(({ help }, name) => {
 						embedChannels.addField(
 							`\u200B`,
-							`\`${prefix}setchannel ${name}\` » \`\`\`yaml${help}\`\`\``,
+							`\`${prefix}setchannel ${name}\` » \`\`\`yaml\n${help}\`\`\``,
 							false
 						);
 					}, listChannels);
