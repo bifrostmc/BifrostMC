@@ -34,6 +34,7 @@ class CacheController {
 				return cacheItems;
 			});
 			await Promise.all(response);
+			console.log(bot.cache_control);
 			return true;
 		}
 		const cacheItem = cache.find(

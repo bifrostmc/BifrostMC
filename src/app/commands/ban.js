@@ -42,6 +42,7 @@ class Ban {
 
 				try {
 					const banEmbedNoticie = new MessageEmbed()
+						.setColor('RANDOM')
 						.setAuthor(banMember.user.tag, banMember.user.avatarURL())
 						.setThumbnail(msg.guild.iconURL() || bot.user.avatarURL())
 						.setTitle('Punição aplicada! (Preview)')
@@ -86,7 +87,9 @@ class Ban {
 					if (bot.cache_control.channels) {
 						bot.cache_control.channels
 							.filter(
-								(channelFiltering) => channelFiltering.function === 'banned'
+								(channelFiltering) =>
+									channelFiltering.function === 'banned' &&
+									channelFiltering.guild_id === msg.channel.guild.id
 							)
 							.map((channelBanned) => {
 								const channelInGuild = msg.guild.channels.cache.get(

@@ -138,7 +138,9 @@ class Promote {
 									.replace('$USER_TAG', msg.member.user.discriminator)
 									.replace('$ERROR_MESSAGE', error.message)
 							)
-							.then((msg) => msg.delete({ timeout: 15000 }));
+							.then((msgForDetectedCommunicationInServices) =>
+								msgForDetectedCommunicationInServices.delete({ timeout: 15000 })
+							);
 						return 'Houve um erro ao se comunicar com o banco de dados.';
 					}
 				} else {
@@ -146,7 +148,9 @@ class Promote {
 						.send(
 							'<:check_error:745344787087098008> Desculpe você não pode adicionar um cargo maior ou igual ao seu. <:check_error:745344787087098008>'
 						)
-						.then((msg) => msg.delete({ timeout: 15000 }));
+						.then((msgForWarningThisUserLowRole) =>
+							msgForWarningThisUserLowRole.delete({ timeout: 15000 })
+						);
 					return 'O usuário não pode promover porque ele tem role menor que a do usuário mencionado.';
 				}
 			} else {
@@ -154,7 +158,9 @@ class Promote {
 					.send(
 						`⁉️ Sintaxe incorreta, use dessa forma \`${prefix}promote {@user/user_id} {@cargo/cargo_id}\` ⁉️`
 					)
-					.then((msg) => msg.delete({ timeout: 15000 }));
+					.then((messageErrorDetected) =>
+						messageErrorDetected.delete({ timeout: 15000 })
+					);
 				return 'O usuário digitou o comando em um sintaxe incorreta.';
 			}
 		};

@@ -68,6 +68,11 @@ class SetChannel {
 					help:
 						'Esse chat recebe as atualizações de logs de status de banimento de um usuário.',
 				},
+				kicked: {
+					formatted: 'expulsões',
+					help:
+						'Nesse chat recebe as logs de expulsões feitas dentro do serivdor.',
+				},
 				sugestoes: {
 					formatted: 'sugestões',
 					help:
