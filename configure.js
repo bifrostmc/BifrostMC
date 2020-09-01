@@ -118,7 +118,7 @@ export default {
 				'<:check_error:745344787087098008> Desculpe você não pode adicionar um cargo maior ou igual ao seu. <:check_error:745344787087098008>',
 
 			// Promote cancelado com sucesso
-			promoteCancelado: `<:check_error:745344787087098008> Afastamento cancelado com sucesso! <:check_error:745344787087098008>`,
+			promoteCancelado: `<:check_error:745344787087098008> Promoção cancelada com sucesso! <:check_error:745344787087098008>`,
 
 			// Essa mensagem é quando não é possível promover um usuário
 			possivelErro:

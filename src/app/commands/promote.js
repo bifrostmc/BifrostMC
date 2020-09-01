@@ -110,9 +110,14 @@ class Promote {
 							'745344786856280085': () => {
 								msg.channel
 									.send(
-										'<:check_error:745344787087098008> Promoção cancelada com sucesso! <:check_error:745344787087098008>'
+										configuration.comandos.promote.promoteCancelado
+											.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+											.replace('$USERNAME', msg.member.user.username)
+											.replace('$USER_TAG', msg.member.user.discriminator)
 									)
-									.then((msg) => msg.delete({ timeout: 5000 }));
+									.then((promoteCancelled) =>
+										promoteCancelled.delete({ timeout: 5000 })
+									);
 							},
 						};
 
@@ -122,7 +127,7 @@ class Promote {
 
 						const collector = messagePromote.createReactionCollector(filter);
 
-						collector.on('collect', async (reaction, user) => {
+						collector.on('collect', async (reaction) => {
 							const emoji = reaction.emoji.id || reaction.emoji.name;
 
 							messagePromote.delete().catch(() => {});
@@ -132,7 +137,7 @@ class Promote {
 						console.log(error);
 						msg.channel
 							.send(
-								configuration.comandos.lock.possivelErro
+								configuration.comandos.promote.possivelErro
 									.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
 									.replace('$USERNAME', msg.member.user.username)
 									.replace('$USER_TAG', msg.member.user.discriminator)
@@ -146,7 +151,10 @@ class Promote {
 				} else {
 					msg.channel
 						.send(
-							'<:check_error:745344787087098008> Desculpe você não pode adicionar um cargo maior ou igual ao seu. <:check_error:745344787087098008>'
+							configuration.comandos.promote.cargoMenor
+								.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+								.replace('$USERNAME', msg.member.user.username)
+								.replace('$USER_TAG', msg.member.user.discriminator)
 						)
 						.then((msgForWarningThisUserLowRole) =>
 							msgForWarningThisUserLowRole.delete({ timeout: 15000 })
@@ -156,7 +164,10 @@ class Promote {
 			} else {
 				msg.channel
 					.send(
-						`⁉️ Sintaxe incorreta, use dessa forma \`${prefix}promote {@user/user_id} {@cargo/cargo_id}\` ⁉️`
+						configuration.comandos.promote.syntaxIncorreta
+							.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+							.replace('$USERNAME', msg.member.user.username)
+							.replace('$USER_TAG', msg.member.user.discriminator)
 					)
 					.then((messageErrorDetected) =>
 						messageErrorDetected.delete({ timeout: 15000 })
