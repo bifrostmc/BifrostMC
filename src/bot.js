@@ -6,6 +6,7 @@ import CacheController from './app/events/CacheController';
 import MessageController from './app/events/MessageController';
 import MessageReactionController from './app/events/MessageReactionController';
 import UnbannedTimeoutController from './app/events/UnbannedTimeoutController';
+import RegisterInitializedRaffles from './app/utils/registerInitializedRaffles';
 
 class Bot {
 	constructor() {
@@ -37,6 +38,7 @@ class Bot {
 		new UnbannedTimeoutController(this.bot);
 		new MessageController(this.bot);
 		new MessageReactionController(this.bot);
+		new RegisterInitializedRaffles(this.bot);
 	}
 
 	async login() {

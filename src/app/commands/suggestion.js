@@ -4,7 +4,6 @@ import moment from 'moment';
 import knex from '../database';
 import configuration from '../../../configure';
 
-import checkUserHasPermission from '../utils/checkUserHasPermission';
 import CacheController from '../events/CacheController';
 
 class Suggestion {

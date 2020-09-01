@@ -5,16 +5,11 @@ class MessageReactionController {
 		this.bot = bot;
 
 		bot.on('raw', async (datas) => {
-			if (
-				datas.t !== 'MESSAGE_REACTION_ADD' &&
-				datas.t !== 'MESSAGE_REACTION_REMOVE'
-			)
-				return;
+			if (datas.t !== 'MESSAGE_REACTION_ADD') return;
 
 			if (
-				datas.t === 'MESSAGE_REACTION_ADD' &&
 				bot.cache_control.channels.get('sugestoes').channel_id ===
-					datas.d.channel_id
+				datas.d.channel_id
 			) {
 				await this.suggestions(datas);
 			}

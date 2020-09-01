@@ -15,6 +15,10 @@ const cache = [
 		name: 'banned',
 		key: 'user_banned_id',
 	},
+	{
+		name: 'raffles',
+		key: 'message_id',
+	},
 ];
 
 class CacheController {

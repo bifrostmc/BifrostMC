@@ -22,14 +22,10 @@ export default async function registerRaffleTimeoutAndReactions(
 			reaction.emoji.name === '🎉' && user.id !== raffle.author_id;
 
 		const collector = message.createReactionCollector(filterUserReactions);
-		let quantityReactions = message.reactions.cache
-			.get('🎉')
-			.users.cache.filter((user) => user.id !== bot.user.id).size;
+		let quantityReactions = message.reactions.cache.get('🎉').count;
 
 		collector.on('collect', async () => {
-			quantityReactions = message.reactions.cache
-				.get('🎉')
-				.users.cache.filter((user) => user.id !== bot.user.id).size;
+			quantityReactions = message.reactions.cache.get('🎉').count;
 
 			try {
 				const embedAdvertisement = new MessageEmbed()
