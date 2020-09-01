@@ -94,6 +94,11 @@ class SetChannel {
 					help:
 						'Esse chat recebe as logs de denúncias que os usuários relatam.',
 				},
+				raffle: {
+					formatted: 'sorteios',
+					help:
+						'Esse chat recebe as logs de soterios que os usuários faz giveaways.',
+				},
 			};
 
 			if (args[0]) {
