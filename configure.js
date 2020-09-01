@@ -32,42 +32,31 @@ const prefix = process.env.PREFIX;
 export default {
 	comandos: {
 		clear: {
-			// Essa mensagem é mandada quando o usuário limpa uma quantidade de mensagens com o $clear
 			apagouMensagens:
 				':broom: $MENTION_USER_SEND, você limpou `$MESSAGES_DELETED` mensagens. :broom:',
 
-			// Essa mensagem é mandada quando há um erro ao deletar as mensagens
 			errorApagarMensagem: 'Houve um erro para deletar as mensagens.',
 		},
 		lock: {
-			// Essa mensagem é enviada quando um administrador bloqueia o canal com sucesso
 			bloqueado:
 				'🔒 O administrador $MENTION_USER_SEND bloqueou o canal, então espere até desbloquea-lo para enviar mensagens. 🔒',
 
-			// Essa mensagem é mandada quando o canal já está bloqueado
 			jaBloqueado: '🔒 $MENTION_USER_SEND Esse canal já está bloqueado! 🔒',
 
-			// Essa mensagem é quando não é possível desbloquear o canal
 			possivelErro:
 				'⁉️ $MENTION_USER_SEND Houve um erro desconhecido, porfavor tente novamente mais tarde ⁉️',
 		},
 		unlock: {
-			// A mensagem abaixo é quando o usuário consegue desbloquear o canal com sucesso
 			desbloquear:
 				'🔓 O administrador $MENTION_USER_SEND desbloqueou o canal, então agora você pode falar nele. 🔓',
 
-			// Essa mensagem é para quando o canal já está desbloqueado
 			jaDesbloqueado:
 				'🔓 $MENTION_USER_SEND O canal atual não está bloqueado, então não pode desbloquear! 🔓',
 
-			// Aqui é quando um erro não indentificado pode acontecer
 			possivelErro:
 				'⁉️ $MENTION_USER_SEND Houve um erro desconhecido, porfavor tente novamente mais tarde ⁉️',
 		},
 		help: {
-			// Essa mensagem é enviada quando o usuario digita um comando no help invalido, por exemplo
-			// $help smcodes
-			// Para especificar o comando que ele mesmo escreveu coloque $COMANDO
 			comandoInvalido: `📎 Comando digitado inválido, porfavor digite um comando válido para ser usuado no \`${prefix}help {comando válido}\` 📎`,
 
 			embeds: {
@@ -86,41 +75,64 @@ export default {
 			},
 		},
 		ban: {
-			// A mensagem abaixo é quando o usuário escreve o comando de ban de forma de errada
 			syntaxIncorreta: `⁉️ Utilize \`${prefix}ban <@usuário/user_id> {tempo} {data_type = [days, months, years]}\`! Caso queira uma punição permanente apenas não informe o tempo a ser banido\nPor exemplo » ${prefix}ban $MESSAGE_AUTHOR 7 days. ⁉️`,
 
-			// Essa mensagem é para quando o usuário menciona um membro inválido
 			naoEncontrado: '⁉️ Não foi possível encontrar este usuário. ⁉️',
 
-			// Aqui é uma mensagem da razão para o banimento
 			digiteRazao:
 				'<:displaytext:746814240396148757> Digite uma razão para o usuário ser banido <:displaytext:746814240396148757>',
 		},
 		demote: {
-			// A mensagem abaixo é quando o usuário escreve o comando de demote de forma de errada
 			syntaxIncorreta: `⁉️ Sintaxe incorreta, use dessa forma \`${prefix}demote {@user/user_id} {@cargo/cargo_id}\` ⁉️`,
 
 			cargoMenor:
 				'<:check_error:745344787087098008> Desculpe você não pode retirar um cargo maior ou igual ao seu. <:check_error:745344787087098008>',
 
-			// Demote cancelado com sucesso
 			demoteCancelado: `<:check_error:745344787087098008> Afastamento cancelado com sucesso! <:check_error:745344787087098008>`,
 
-			// Essa mensagem é quando não é possível demotar um usuário
 			possivelErro:
 				'⁉️ $MENTION_USER_SEND Houve um erro desconhecido, porfavor tente novamente mais tarde ⁉️',
 		},
 		promote: {
-			// A mensagem abaixo é quando o usuário escreve o comando de promote de forma de errada
 			syntaxIncorreta: `⁉️ Sintaxe incorreta, use dessa forma \`${prefix}promote {@user/user_id} {@cargo/cargo_id}\` ⁉️`,
 
 			cargoMenor:
 				'<:check_error:745344787087098008> Desculpe você não pode adicionar um cargo maior ou igual ao seu. <:check_error:745344787087098008>',
 
-			// Promote cancelado com sucesso
 			promoteCancelado: `<:check_error:745344787087098008> Promoção cancelada com sucesso! <:check_error:745344787087098008>`,
 
-			// Essa mensagem é quando não é possível promover um usuário
+			possivelErro:
+				'⁉️ $MENTION_USER_SEND Houve um erro desconhecido, porfavor tente novamente mais tarde ⁉️',
+		},
+		denunciar: {
+			syntaxIncorreta: `⁉️ Sintaxe incorreta, use dessa forma \`${prefix}denunciar {@user/user_id}\`, após executar o comando iniciará uma sessão de perguntas para a denuncia ser concluída ⁉️`,
+			naoAchouCanal:
+				'⁉️ $MENTION_USER_SEND, nenhum canal registrado para receber denúncias. ⁉️',
+
+			motivoDenuncia: `❗ Digite o motivo da denúncia ao usuário \`$MENTION_TAG\`. (2 Minutos) (Obrigatório) ❗`,
+			cancelarDenuncia: `Digite \`cancelar\` para sair da sessão de denúncia.`,
+			saiuDenuncia:
+				'<:check_error:745344787087098008> Você saiu da sessão de denúncia com sucesso, você pode abrir outra a qualquer momento. <:check_error:745344787087098008>',
+
+			enviarLinks: `<:alert:745345548424314881> Agora envie links para comprovar sua denúncia (Obrigatório) <:alert:745345548424314881>`,
+			linksObrigatorios: `❗ Você não incluiu links de referências para imagens/videos, então sua denúncia foi cancelada por esse motivo. ❗`,
+
+			pv: {
+				aceitou: {
+					admin:
+						'🎉 O usuário foi banido com sucesso! Obrigado pela colaboração 🎉',
+
+					author: `🎉 Parabéns sua denúncia ao usuário \`$MENTION_TAG\`. 🎉\nAgradecemos pela sua colaboração e pedimos que continue a reportar novos possíveis infratores.`,
+					denunciado: `<:check_error:745344787087098008> Você foi denúnciado e recebeu um ban, de nosso servidor \`$GUILD_NAME\`, veja a denúncia logo abaixo <:check_error:745344787087098008>\n$PREVIEW_REPORT`,
+				},
+				rejeitou: {
+					admin:
+						'🎉 O usuário foi liberado com sucesso! Obrigado pela colaboração 🎉',
+
+					author: `<:check_error:745344787087098008> Infelizmente sua denúncia ao usuário \`MENTION_TAG\` foi desaprovada, caso tenha alguma dúvida entre em contato com \`${user.username}#${user.discriminator}\`. <:check_error:745344787087098008>\nAgradecemos pela sua colaboração e pedimos que continue a reportar novos possíveis infratores.`,
+				},
+			},
+
 			possivelErro:
 				'⁉️ $MENTION_USER_SEND Houve um erro desconhecido, porfavor tente novamente mais tarde ⁉️',
 		},

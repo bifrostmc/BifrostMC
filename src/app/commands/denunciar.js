@@ -24,7 +24,10 @@ class Denunciar {
 
 				if (!userMention) {
 					channel.send(
-						`⁉️ Você digitou um usuário inválido, porfavor digite dessa forma \`${prefix}denunciar {@user/user_id}\` ⁉️`
+						configuration.comandos.denunciar.syntaxIncorreta
+							.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+							.replace('$USERNAME', msg.member.user.username)
+							.replace('$USER_TAG', msg.member.user.discriminator)
 					);
 					return 'O usuário mencionou um usuário inválido.';
 				}
@@ -35,15 +38,34 @@ class Denunciar {
 
 					if (channel_base.length <= 0) {
 						channel.send(
-							`⁉️ <@${msg.author.id}>, nenhum canal registrado para receber denúncias. ⁉️`
+							configuration.comandos.denunciar.naoAchouCanal
+								.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+								.replace('$USERNAME', msg.member.user.username)
+								.replace('$USER_TAG', msg.member.user.discriminator)
 						);
 						return 'Nenhum canal registrado para receber denúncias.';
 					}
 
 					channel.send(
-						`❗ Digite o motivo da denúncia ao usuário \`${userMention.user.username}#${userMention.user.discriminator}\`. (2 Minutos) (Obrigatório) ❗`
+						configuration.comandos.denunciar.naoAchouCanal
+							.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+							.replace('$USERNAME', msg.member.user.username)
+							.replace('$USER_TAG', msg.member.user.discriminator)
+							.replace(
+								'$MENTION_TAG',
+								`${userMention.user.username}#${userMention.user.discriminator}`
+							)
 					);
-					channel.send(`Digite \`cancelar\` para sair da sessão de denúncia.`);
+					channel.send(
+						configuration.comandos.denunciar.naoAchouCanal
+							.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+							.replace('$USERNAME', msg.member.user.username)
+							.replace('$USER_TAG', msg.member.user.discriminator)
+							.replace(
+								'$MENTION_TAG',
+								`${userMention.user.username}#${userMention.user.discriminator}`
+							)
+					);
 					const filterReason = (m) => m.author.id === msg.author.id;
 					const collectorReason = channel.createMessageCollector(filterReason, {
 						time: 1000 * 120,
@@ -54,12 +76,26 @@ class Denunciar {
 						messageReason.delete().catch(() => {});
 						if (messageReason.content.toLowerCase() === 'cancelar') {
 							channel.send(
-								'<:check_error:745344787087098008> Você saiu da sessão de denúncia com sucesso, você pode abrir outra a qualquer momento. <:check_error:745344787087098008>'
+								configuration.comandos.denunciar.saiuDenuncia
+									.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+									.replace('$USERNAME', msg.member.user.username)
+									.replace('$USER_TAG', msg.member.user.discriminator)
+									.replace(
+										'$MENTION_TAG',
+										`${userMention.user.username}#${userMention.user.discriminator}`
+									)
 							);
 							return;
 						}
 						channel.send(
-							`<:alert:745345548424314881> Agora envie links para comprovar sua denúncia (Obrigatório) <:alert:745345548424314881>`
+							configuration.comandos.denunciar.enviarLinks
+								.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+								.replace('$USERNAME', msg.member.user.username)
+								.replace('$USER_TAG', msg.member.user.discriminator)
+								.replace(
+									'$MENTION_TAG',
+									`${userMention.user.username}#${userMention.user.discriminator}`
+								)
 						);
 
 						const filterEvidences = (m) => m.author.id === msg.author.id;
@@ -175,31 +211,129 @@ class Denunciar {
 														case '745344787317784648':
 															messageForAdmin.delete().catch(() => {});
 															await messageForAdmin.channel.send(
-																'🎉 O usuário foi banido com sucesso! Obrigado pela colaboração 🎉'
+																configuration.comandos.denunciar.pv.aceitou.admin
+																	.replace(
+																		'$MENTION_USER_SEND',
+																		`<@${msg.author.id}>`
+																	)
+																	.replace(
+																		'$USERNAME',
+																		msg.member.user.username
+																	)
+																	.replace(
+																		'$USER_TAG',
+																		msg.member.user.discriminator
+																	)
+																	.replace(
+																		'$MENTION_TAG',
+																		`${userMention.user.username}#${userMention.user.discriminator}`
+																	)
+																	.replace('$PREVIEW_REPORT', previewEmbed)
+																	.replace(
+																		'$GUILD_NAME',
+																		msg.channel.guild.name
+																	)
 															);
 															await msg.author.send(
-																`🎉 Parabéns sua denúncia ao usuário \`${userMention.user.username}#${userMention.user.discriminator}\` foi aprovada, o usuário já foi banido de nosso discord, por \`${user.username}#${user.discriminator}\`. 🎉`
-															);
-															await msg.author.send(
-																`Agradecemos pela sua colaboração e pedimos que continue a reportar novos possíveis infratores.`
+																configuration.comandos.denunciar.pv.aceitou.author
+																	.replace(
+																		'$MENTION_USER_SEND',
+																		`<@${msg.author.id}>`
+																	)
+																	.replace(
+																		'$USERNAME',
+																		msg.member.user.username
+																	)
+																	.replace(
+																		'$USER_TAG',
+																		msg.member.user.discriminator
+																	)
+																	.replace(
+																		'$MENTION_TAG',
+																		`${userMention.user.username}#${userMention.user.discriminator}`
+																	)
+																	.replace('$PREVIEW_REPORT', previewEmbed)
+																	.replace(
+																		'$GUILD_NAME',
+																		msg.channel.guild.name
+																	)
 															);
 															await userMention.user.send(
-																`<:check_error:745344787087098008> Você foi denúnciado e recebeu um ban, de nosso servidor \`${msg.channel.guild.name}\`, veja a denúncia logo abaixo <:check_error:745344787087098008>`
+																configuration.comandos.denunciar.pv.aceitou.denunciado
+																	.replace(
+																		'$MENTION_USER_SEND',
+																		`<@${msg.author.id}>`
+																	)
+																	.replace(
+																		'$USERNAME',
+																		msg.member.user.username
+																	)
+																	.replace(
+																		'$USER_TAG',
+																		msg.member.user.discriminator
+																	)
+																	.replace(
+																		'$MENTION_TAG',
+																		`${userMention.user.username}#${userMention.user.discriminator}`
+																	)
+																	.replace('$PREVIEW_REPORT', previewEmbed)
+																	.replace(
+																		'$GUILD_NAME',
+																		msg.channel.guild.name
+																	)
 															);
-															await userMention.user.send(previewEmbed);
 															userMention.ban({
 																reason: messageReason.content,
 															});
 															break;
 														case '745344786856280085':
 															messageForAdmin.channel.send(
-																'🎉 O usuário foi liberado com sucesso! Obrigado pela colaboração 🎉'
+																configuration.comandos.denunciar.pv.rejeitou.admin
+																	.replace(
+																		'$MENTION_USER_SEND',
+																		`<@${msg.author.id}>`
+																	)
+																	.replace(
+																		'$USERNAME',
+																		msg.member.user.username
+																	)
+																	.replace(
+																		'$USER_TAG',
+																		msg.member.user.discriminator
+																	)
+																	.replace(
+																		'$MENTION_TAG',
+																		`${userMention.user.username}#${userMention.user.discriminator}`
+																	)
+																	.replace('$PREVIEW_REPORT', previewEmbed)
+																	.replace(
+																		'$GUILD_NAME',
+																		msg.channel.guild.name
+																	)
 															);
 															msg.author.send(
-																`<:check_error:745344787087098008> Infelizmente sua denúncia ao usuário \`${userMention.user.username}#${userMention.user.discriminator}\` foi desaprovada, caso tenha alguma dúvida entre em contato com \`${user.username}#${user.discriminator}\`. <:check_error:745344787087098008>`
-															);
-															msg.author.send(
-																`Agradecemos pela sua colaboração e pedimos que continue a reportar novos possíveis infratores.`
+																configuration.comandos.denunciar.pv.aceitou.author
+																	.replace(
+																		'$MENTION_USER_SEND',
+																		`<@${msg.author.id}>`
+																	)
+																	.replace(
+																		'$USERNAME',
+																		msg.member.user.username
+																	)
+																	.replace(
+																		'$USER_TAG',
+																		msg.member.user.discriminator
+																	)
+																	.replace(
+																		'$MENTION_TAG',
+																		`${userMention.user.username}#${userMention.user.discriminator}`
+																	)
+																	.replace('$PREVIEW_REPORT', previewEmbed)
+																	.replace(
+																		'$GUILD_NAME',
+																		msg.channel.guild.name
+																	)
 															);
 															messageForAdmin.delete().catch(() => {});
 															break;
@@ -214,7 +348,15 @@ class Denunciar {
 								return `O usuário ${msg.author.username} delatou o usuário ${userMention.user.username} por descumprir as regras.`;
 							}
 							channel.send(
-								'Você não incluiu links de referências para imagens/videos, então sua denúncia foi cancelada por esse motivo.'
+								configuration.comandos.denunciar.linksObrigatorios
+									.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+									.replace('$USERNAME', msg.member.user.username)
+									.replace('$USER_TAG', msg.member.user.discriminator)
+									.replace(
+										'$MENTION_TAG',
+										`${userMention.user.username}#${userMention.user.discriminator}`
+									)
+									.replace('$GUILD_NAME', msg.channel.guild.name)
 							);
 							return `O usuário ${msg.author.username} não incluiu provas em sua denúncia.`;
 						});
@@ -222,7 +364,7 @@ class Denunciar {
 				} catch (error) {
 					console.log(error);
 					channel.send(
-						configuration.comandos.lock.possivelErro
+						configuration.comandos.denunciar.possivelErro
 							.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
 							.replace('$USERNAME', msg.member.user.username)
 							.replace('$USER_TAG', msg.member.user.discriminator)
@@ -232,7 +374,10 @@ class Denunciar {
 				}
 			} else {
 				channel.send(
-					`⁉️ Sintaxe incorreta, use dessa forma \`${prefix}denunciar {@user/user_id}\`, após executar o comando iniciará uma sessão de perguntas para a denuncia ser concluída ⁉️`
+					configuration.comandos.denunciar.syntaxIncorreta
+						.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+						.replace('$USERNAME', msg.member.user.username)
+						.replace('$USER_TAG', msg.member.user.discriminator)
 				);
 				return 'O usuário digitou o comando em um sintaxe incorreta.';
 			}

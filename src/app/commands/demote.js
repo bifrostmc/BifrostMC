@@ -126,7 +126,7 @@ class Demote {
 
 						const collector = messageDemote.createReactionCollector(filter);
 
-						collector.on('collect', async (reaction, user) => {
+						collector.on('collect', async (reaction) => {
 							const emoji = reaction.emoji.id || reaction.emoji.name;
 
 							messageDemote.delete().catch(() => {});
