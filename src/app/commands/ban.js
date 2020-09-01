@@ -2,6 +2,7 @@ import { MessageEmbed } from 'discord.js';
 import moment from 'moment';
 import knex from '../database';
 import registerUnbannedTimeout from '../utils/registerUnbannedTimeout';
+import configuration from '../../../configure';
 
 class Ban {
 	constructor() {
@@ -15,7 +16,10 @@ class Ban {
 		this.run = async ({ msg, args, prefix, bot }) => {
 			if (args.length === 0) {
 				msg.channel.send(
-					`Utilize \`${prefix}ban <@usuário/user_id> {tempo} {data_type = [days, months, years]}\`! Caso queira uma punição permanente apenas não informe o tempo a ser banido\nPor exemplo » ${prefix}ban ${msg.author} 7 days`
+					configuration.comandos.ban.syntaxIncorreta
+						.replace('$USERNAME', msg.member.user.username)
+						.replace('$USER_TAG', msg.member.user.discriminator)
+						.replace('$AUTHOR', msg.author)
 				);
 				return 'O usuário não informou as propriedades.';
 			}
@@ -23,12 +27,20 @@ class Ban {
 				msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
 
 			if (!banMember) {
-				msg.reply('Não foi possível encontrar este usuário!');
+				msg.reply(
+					configuration.comandos.ban.naoEncontrado
+						.replace('$USERNAME', msg.member.user.username)
+						.replace('$USER_TAG', msg.member.user.discriminator)
+						.replace('$AUTHOR', msg.author)
+				);
 				return 'O usuário mencionado não encontrado';
 			}
 
 			msg.channel.send(
-				'<:displaytext:746814240396148757> Digite uma razão para o usuário ser banido <:displaytext:746814240396148757>'
+				configuration.comandos.ban.digiteRazao
+					.replace('$USERNAME', msg.member.user.username)
+					.replace('$USER_TAG', msg.member.user.discriminator)
+					.replace('$AUTHOR', msg.author)
 			);
 
 			const filterBanned = (m) => m.author.id === msg.author.id;

@@ -85,5 +85,44 @@ export default {
 				},
 			},
 		},
+		ban: {
+			// A mensagem abaixo é quando o usuário escreve o comando de ban de forma de errada
+			syntaxIncorreta: `⁉️ Utilize \`${prefix}ban <@usuário/user_id> {tempo} {data_type = [days, months, years]}\`! Caso queira uma punição permanente apenas não informe o tempo a ser banido\nPor exemplo » ${prefix}ban $MESSAGE_AUTHOR 7 days. ⁉️`,
+
+			// Essa mensagem é para quando o usuário menciona um membro inválido
+			naoEncontrado: '⁉️ Não foi possível encontrar este usuário. ⁉️',
+
+			// Aqui é uma mensagem da razão para o banimento
+			digiteRazao:
+				'<:displaytext:746814240396148757> Digite uma razão para o usuário ser banido <:displaytext:746814240396148757>',
+		},
+		demote: {
+			// A mensagem abaixo é quando o usuário escreve o comando de demote de forma de errada
+			syntaxIncorreta: `⁉️ Sintaxe incorreta, use dessa forma \`${prefix}demote {@user/user_id} {@cargo/cargo_id}\` ⁉️`,
+
+			cargoMenor:
+				'<:check_error:745344787087098008> Desculpe você não pode retirar um cargo maior ou igual ao seu. <:check_error:745344787087098008>',
+
+			// Demote cancelado com sucesso
+			demoteCancelado: `<:check_error:745344787087098008> Afastamento cancelado com sucesso! <:check_error:745344787087098008>`,
+
+			// Essa mensagem é quando não é possível demotar um usuário
+			possivelErro:
+				'⁉️ $MENTION_USER_SEND Houve um erro desconhecido, porfavor tente novamente mais tarde ⁉️',
+		},
+		promote: {
+			// A mensagem abaixo é quando o usuário escreve o comando de promote de forma de errada
+			syntaxIncorreta: `⁉️ Sintaxe incorreta, use dessa forma \`${prefix}promote {@user/user_id} {@cargo/cargo_id}\` ⁉️`,
+
+			cargoMenor:
+				'<:check_error:745344787087098008> Desculpe você não pode adicionar um cargo maior ou igual ao seu. <:check_error:745344787087098008>',
+
+			// Promote cancelado com sucesso
+			promoteCancelado: `<:check_error:745344787087098008> Afastamento cancelado com sucesso! <:check_error:745344787087098008>`,
+
+			// Essa mensagem é quando não é possível promover um usuário
+			possivelErro:
+				'⁉️ $MENTION_USER_SEND Houve um erro desconhecido, porfavor tente novamente mais tarde ⁉️',
+		},
 	},
 };

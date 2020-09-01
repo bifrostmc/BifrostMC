@@ -111,7 +111,10 @@ class Demote {
 							'745344786856280085': () => {
 								msg.channel
 									.send(
-										'<:check_error:745344787087098008> Afastamento cancelado com sucesso! <:check_error:745344787087098008>'
+										configuration.comandos.demote.demoteCancelado
+											.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+											.replace('$USERNAME', msg.member.user.username)
+											.replace('$USER_TAG', msg.member.user.discriminator)
 									)
 									.then((msgCancel) => msgCancel.delete({ timeout: 5000 }));
 							},
@@ -133,29 +136,37 @@ class Demote {
 						console.log(error);
 						msg.channel
 							.send(
-								configuration.comandos.lock.possivelErro
+								configuration.comandos.demote.possivelErro
 									.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
 									.replace('$USERNAME', msg.member.user.username)
 									.replace('$USER_TAG', msg.member.user.discriminator)
 									.replace('$ERROR_MESSAGE', error.message)
 							)
-							.then((msg) => msg.delete({ timeout: 15000 }));
+							.then((possibleError) =>
+								possibleError.delete({ timeout: 15000 })
+							);
 						return 'Houve um erro ao se comunicar com o banco de dados.';
 					}
 				} else {
 					msg.channel
 						.send(
-							'<:check_error:745344787087098008> Desculpe você não pode retirar um cargo maior ou igual ao seu. <:check_error:745344787087098008>'
+							configuration.comandos.demote.cargoMenor
+								.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+								.replace('$USERNAME', msg.member.user.username)
+								.replace('$USER_TAG', msg.member.user.discriminator)
 						)
-						.then((msg) => msg.delete({ timeout: 15000 }));
-					return 'O usuário não pode promover porque ele tem role menor que a do usuário mencionado.';
+						.then((roleMetion) => roleMetion.delete({ timeout: 15000 }));
+					return 'O usuário não pode demotar porque ele tem role menor que a do usuário mencionado.';
 				}
 			} else {
 				msg.channel
 					.send(
-						`⁉️ Sintaxe incorreta, use dessa forma \`${prefix}demote {@user/user_id} {@cargo/cargo_id}\` ⁉️`
+						configuration.comandos.demote.syntaxIncorreta
+							.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+							.replace('$USERNAME', msg.member.user.username)
+							.replace('$USER_TAG', msg.member.user.discriminator)
 					)
-					.then((msg) => msg.delete({ timeout: 15000 }));
+					.then((syntaxError) => syntaxError.delete({ timeout: 15000 }));
 				return 'O usuário digitou o comando em um sintaxe incorreta.';
 			}
 		};

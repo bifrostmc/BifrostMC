@@ -5,7 +5,7 @@ class Help {
 	constructor() {
 		this.config = {
 			name: 'help',
-			aliases: ['ajuda', '?', 'h', 'a'],
+			aliases: ['ajuda', '?', 'h', 'commands', 'comandos'],
 			help:
 				'Esse comando serve para ajudar o jogador que estiver com dúvidas em comandos',
 			requiredPermissions: [],
