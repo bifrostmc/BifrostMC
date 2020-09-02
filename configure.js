@@ -129,7 +129,7 @@ export default {
 					admin:
 						'🎉 O usuário foi liberado com sucesso! Obrigado pela colaboração 🎉',
 
-					author: `<:check_error:745344787087098008> Infelizmente sua denúncia ao usuário \`MENTION_TAG\` foi desaprovada, caso tenha alguma dúvida entre em contato com \`${user.username}#${user.discriminator}\`. <:check_error:745344787087098008>\nAgradecemos pela sua colaboração e pedimos que continue a reportar novos possíveis infratores.`,
+					author: `<:check_error:745344787087098008> Infelizmente sua denúncia ao usuário \`$MENTION_TAG\` foi desaprovada, caso tenha alguma dúvida entre em contato com \`$APLICATOR\`. <:check_error:745344787087098008>\nAgradecemos pela sua colaboração e pedimos que continue a reportar novos possíveis infratores.`,
 				},
 			},
 

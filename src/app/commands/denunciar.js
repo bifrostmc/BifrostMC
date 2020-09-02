@@ -312,7 +312,7 @@ class Denunciar {
 																	)
 															);
 															msg.author.send(
-																configuration.comandos.denunciar.pv.aceitou.author
+																configuration.comandos.denunciar.pv.rejeitou.author
 																	.replace(
 																		'$MENTION_USER_SEND',
 																		`<@${msg.author.id}>`
@@ -333,6 +333,10 @@ class Denunciar {
 																	.replace(
 																		'$GUILD_NAME',
 																		msg.channel.guild.name
+																	)
+																	.replace(
+																		'$APLICATOR',
+																		`${user.username}#${user.discriminator}`
 																	)
 															);
 															messageForAdmin.delete().catch(() => {});
