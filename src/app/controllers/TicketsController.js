@@ -77,7 +77,7 @@ class TicketController {
 		};
 
 		this.delete = (req) => {
-			return new Promise((res, rej) => {
+			return new Promise(async (res, rej) => {
 				const { user_id, bot, user } = req.body;
 				const sucess = `O ticket de ${user} foi deletado com sucesso!`;
 
