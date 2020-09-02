@@ -136,5 +136,8 @@ export default {
 			possivelErro:
 				'⁉️ $MENTION_USER_SEND Houve um erro desconhecido, porfavor tente novamente mais tarde ⁉️',
 		},
+		raffle: {
+			syntaxIncorreta: `⁉️ Sintaxe incorreta, use dessa forma por exemplo \`${prefix}raffle {tempo} {[days, months, years]}\` ⁉️`,
+		},
 	},
 };

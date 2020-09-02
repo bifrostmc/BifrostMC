@@ -1,6 +1,7 @@
 import { MessageEmbed } from 'discord.js';
 import moment from 'moment';
 import knex from '../database';
+import configuration from '../../../configure';
 import registerRaffleTimeoutAndReactions from '../utils/registerRaffleTimeoutAndReactions';
 
 class Raffle {
@@ -12,11 +13,14 @@ class Raffle {
 				'Sortear um membro entre todos membros do servidor que está online/offline/todos .',
 			requiredPermissions: ['MANAGE_GUILD'],
 		};
-		this.run = async ({ msg, args, prefix, bot }) => {
+		this.run = async ({ msg, args, bot }) => {
 			if (args.length <= 1) {
 				msg.channel
 					.send(
-						`⁉️ Sintaxe incorreta, use dessa forma por exemplo \`${prefix}${this.config.name} {tempo} {[days, months, years]}\` ⁉️`
+						configuration.comandos.raffle.syntaxIncorreta
+							.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
+							.replace('$USERNAME', msg.member.user.username)
+							.replace('$USER_TAG', msg.member.user.discriminator)
 					)
 					.then((messageErrorDetected) =>
 						messageErrorDetected.delete({ timeout: 15000 })

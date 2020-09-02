@@ -1,7 +1,3 @@
-import { MessageEmbed } from 'discord.js';
-
-import configuration from '../../../configure';
-
 class Noticie {
 	constructor() {
 		this.config = {
@@ -12,7 +8,7 @@ class Noticie {
 			requiredPermissions: ['MANAGE_MESSAGES'],
 		};
 
-		this.run = async ({ msg, bot, args, prefix }) => {
+		this.run = async ({ msg, bot }) => {
 			msg.channel.send(
 				`❗ ${msg.author}, porfavor digite uma mensagem a ser anúnciada (5 minutos) (*) ❗\n\nDigite \`cancelar\` para sair da sessão de sugestão.`
 			);
@@ -26,40 +22,31 @@ class Noticie {
 				}
 			);
 
-			let usersNoticied = 0;
-
 			collectorNoticie.on('collect', async (messageNoticie) => {
 				messageNoticie.delete().catch(() => {});
 				if (messageNoticie.content.toLowerCase() === 'cancelar') {
-					channel
+					msg.channel
 						.send(
 							'<:check_error:745344787087098008> Você saiu da sessão de sugestão com sucesso, você pode abrir outra a qualquer momento. <:check_error:745344787087098008>'
 						)
-						.then((msg) => msg.delete({ timeout: 5000 }));
+						.then((leaveMessage) => leaveMessage.delete({ timeout: 5000 }));
 				}
 
-				const collectorResulting = await msg.guild.members.cache.map(
-					async (member) => {
-						if (member.id == bot.user.id || member.user.bot) return 0;
-						try {
-							await member.send(
-								`📣 ${member}. Olá, venho em seu privado para anunciar um recado que nossa equipe tem a fazer, admnistrador que efetuou esse anúncio ${msg.author.tag} 📣`
-							);
-							await member.send(`\`\`\`yaml\n${messageNoticie.content}\`\`\``);
-							usersNoticied++;
-							return 1;
-						} catch (error) {
-							console.log(error);
-							return 0;
-						}
+				await msg.guild.members.cache.map(async (member) => {
+					if (member.id === bot.user.id || member.user.bot) return 0;
+					try {
+						await member.send(
+							`📣 ${member}. Olá, venho em seu privado para anunciar um recado que nossa equipe tem a fazer, admnistrador que efetuou esse anúncio ${msg.author.tag} 📣`
+						);
+						await member.send(`\`\`\`yaml\n${messageNoticie.content}\`\`\``);
+						return 1;
+					} catch (error) {
+						console.log(error);
+						return 0;
 					}
-				);
+				});
 
-				msg.channel.send(
-					`🎉 ${msg.author}. Você anunciou com sucesso! Consegui detectar ${
-						teste.filter((value) => value !== 0).length
-					} membros. 🎉`
-				);
+				msg.channel.send(`🎉 ${msg.author}. Você anunciou com sucesso!  🎉`);
 			});
 		};
 	}
