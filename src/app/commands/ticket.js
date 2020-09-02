@@ -74,7 +74,7 @@ class Ticket {
 					if (!msg.member.hasPermission('MANAGE_MESSAGES'))
 						return msg.reply(
 							`Você não tem permissão para excluir tickets de outros usuários.`
-							);
+						);
 					deleted =
 					msg.mentions.members.first() || msg.guild.members.get(args[1]);
 				}
@@ -82,8 +82,9 @@ class Ticket {
 					const ticket = await TicketsController.delete({
 						body: {
 							user_id: deleted.user.id,
+							author_member: msg.member,
 							bot,
-							user: deleted,
+							member: deleted,
 						},
 					});
 					msg.reply(ticket);

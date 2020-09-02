@@ -78,17 +78,25 @@ class TicketController {
 
 		this.delete = (req) => {
 			return new Promise(async (res, rej) => {
-				const { user_id, bot, user } = req.body;
-				const sucess = `O ticket de ${user} foi deletado com sucesso!`;
+				const { user_id, bot, member, author_member } = req.body;
+				const sucess = (author_member.user.id === member.user.id)
+					? 'o seu ticket foi deletado com sucesso!'
+					: `O ticket de ${member} foi deletado com sucesso!`;
 
 				const ticket = await knex('tickets').where({ user_id }).limit(1).first();
-				console.log(ticket)
-				if (!ticket) return rej(new Error(`${user} não possui um ticket.`));
+				console.log(member)
+				if (!ticket) return res(
+					(author_member.user.id === member.user.id)
+						? 'você não possuí um ticket registrado em nosso sistema.'
+						: `o usuário \`${member.user.username}#${member.user.discriminator}\` não possui um ticket.`
+				);
 
 				this.eliminate(user_id, bot, result.data).then((response) => {
 					if (!response)
 						return rej(
-							new Error(`Não foi possível deletar o ticket de ${user}`)
+							(author_member.user.id === member.user.id)
+							? 'não foi possível deletar o seu ticket por uim erro desconhecido.'
+							: `Não foi possível deletar o ticket de \`${member.user.username}#${member.user.discriminator}\`.`
 						);
 
 					return res(sucess);
