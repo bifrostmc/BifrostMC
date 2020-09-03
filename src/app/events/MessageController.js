@@ -2,7 +2,7 @@ import checkUserHasPermission from '../utils/checkUserHasPermission';
 
 class MessageController {
 	constructor(bot) {
-		bot.on('message', (msg) => {
+		bot.on('message', async (msg) => {
 			const prefix = process.env.PREFIX;
 			if (!msg.content.startsWith(prefix)) return;
 			if (msg.author.bot) return;
@@ -17,7 +17,7 @@ class MessageController {
 						if (!checkUserHasPermission(perm, msg.member)) state = false;
 					});
 				}
-				msg.delete().catch(() => {});
+				await msg.delete();
 				if (!state && msg.member.id !== process.env.OWNER) {
 					msg.reply('Você não tem permissão para executar esse comando.');
 				} else {
