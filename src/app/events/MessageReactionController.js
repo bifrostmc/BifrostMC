@@ -7,6 +7,9 @@ class MessageReactionController {
 		bot.on('raw', async (datas) => {
 			if (datas.t !== 'MESSAGE_REACTION_ADD') return;
 
+			if (!bot.cache_control.channels.get('sugestoes'))
+				return;
+
 			if (
 				bot.cache_control.channels.get('sugestoes').channel_id ===
 				datas.d.channel_id

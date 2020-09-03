@@ -84,7 +84,6 @@ class TicketController {
 					: `O ticket de ${member} foi deletado com sucesso!`;
 
 				const ticket = await knex('tickets').where({ user_id }).limit(1).first();
-				console.log(member)
 				if (!ticket) return res(
 					(author_member.user.id === member.user.id)
 						? 'você não possuí um ticket registrado em nosso sistema.'
