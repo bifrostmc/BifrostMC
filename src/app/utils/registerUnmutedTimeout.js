@@ -18,51 +18,54 @@ export default async function registerUnmutedTimeout(user_muted_id) {
 	const now = moment();
 	const diference = moment.duration(dueDateInMS.diff(now)).asMilliseconds();
 
+	const guild = server.Bot.bot.guilds.cache.get(mutedUser.guild_id);
+
+	const userAuthor = await bot.users.fetch(mutedUser.author_id);
+	const userMutedFetched = await guild.members.fetch(
+		mutedUser.user_muted_id
+	);
+
+	const muterole = guild.roles.cache.find((role) => role.name === "Muted");
+
 	setTimeout(async () => {
 		try {
-			const guild = server.Bot.bot.guilds.cache.get(mutedUser.guild_id);
 
-			const userBanned = await guild.fetchBan(mutedUser.user_muted_id);
-
-			const userAuthor = await bot.users.fetch(mutedUser.author_id);
-			const userBannedFetched = await bot.users.fetch(
-				mutedUser.user_muted_id
-			);
-
-			await guild.members.unban(mutedUser.user_muted_id);
+			await userMutedFetched.roles.remove(muterole);
 
 			await knex('muted')
 				.where({
 					id: mutedUser.id,
 				})
 				.del();
-			CacheController.updateCache(bot, 'muted');
 
-			const banEmbedNoticie = new MessageEmbed()
-				.setAuthor(userBannedFetched.tag, userBannedFetched.avatarURL())
+			const unMuteEmbedNoticie = new MessageEmbed()
+				.setAuthor(userMutedFetched.user.tag, userMutedFetched.user.avatarURL())
 				.setThumbnail(guild.iconURL() || bot.user.avatarURL())
 				.setTitle('Punição anulada!')
 				.addField(
 					'\u200B',
-					`**Usuário desbanido »** \`${userBannedFetched.tag}\``
+					`**Usuário desmutado »** \`${userMutedFetched.user.tag}\``
 				)
 				.addField('\u200B', `**Aplicação feita por »** \`${userAuthor.tag}\``)
-				.addField('\u200B', `**Formato da punição »** \`${userBanned.reason}\``)
-				.addField('\u200B', `**Motivo »** Prazo da punição acabado`)
+				.addField('\u200B', `**Formato da punição »** \`Mute\``)
+				.addField('\u200B', `**Motivo »** Prazo da punição finalizado`)
 				.setTimestamp()
 				.setFooter(
 					`Copyright © 2020 ${bot.user.username}`,
 					bot.user.avatarURL()
 				);
 
-			bot.cache_control.channels
-				.filter((channelFiltering) => channelFiltering.function === 'muted')
+			const channelsMutes = await knex('channels').where({
+				function: 'muted',
+				guild_id: guild.id
+			});
+			channelsMutes
 				.map((channelBanned) => {
 					const channelInGuild = guild.channels.cache.get(
 						channelBanned.channel_id
 					);
 
-					return channelInGuild.send(banEmbedNoticie);
+					return channelInGuild.send(unMuteEmbedNoticie);
 				});
 		} catch (error) {
 			console.log(error);

@@ -19,6 +19,10 @@ const cache = [
 		name: 'raffles',
 		key: 'message_id',
 	},
+	{
+		name: 'muted',
+		key: 'user_muted_id',
+	},
 ];
 
 class CacheController {

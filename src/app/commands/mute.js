@@ -37,6 +37,10 @@ class Mute {
 			}
 
 			try {
+				await knex('muted').where({
+					user_muted_id: muteMember.user.id
+				}).del()
+				
 				const muteEmbedNoticie = new MessageEmbed()
 					.setColor('RANDOM')
 					.setAuthor(muteMember.user.tag, muteMember.user.avatarURL())
@@ -84,23 +88,23 @@ class Mute {
 					await knex('muted').insert([
 						{
 							guild_id: msg.channel.guild.id,
-							user_muted_id: mutedMember.user.id,
+							user_muted_id: muteMember.user.id,
 							author_id: msg.author.id,
 							due_date: moment().add(args[1], args[2]).valueOf(),
 							is_due_date: args.length > 1,
 						},
 					]);
-					registerUnmutedTimeout(mutedMember.user.id);
+					registerUnmutedTimeout(muteMember.user.id);
 				}
 				const msgMuted = await msg.channel.send(muteEmbedNoticie);
 				msgMuted.delete({ timeout: 5000 });
 				muteEmbedNoticie.setTitle('Punição aplicada!');
 				if (bot.cache_control.channels) {
-					const channelsBans = await knex('channels').where({
+					const channelsMutes = await knex('channels').where({
 						function: 'muted',
 						guild_id: msg.guild.id
 					});
-					channelsBans
+					channelsMutes
 						.map((channelBanned) => {
 							const channelInGuild = msg.guild.channels.cache.get(
 								channelBanned.channel_id
