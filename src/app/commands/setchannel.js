@@ -101,6 +101,11 @@ class SetChannel {
 					help:
 						'Esse chat recebe as logs de soterios que os usuários faz giveaways.',
 				},
+				muted: {
+					formatted: 'muted',
+					help:
+						'Agora esse canal receberá os avisos de silenciamento.',
+				},
 			};
 
 			if (args[0]) {

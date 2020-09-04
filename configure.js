@@ -90,6 +90,14 @@ export default {
 			digiteRazao:
 				'<:displaytext:746814240396148757> Digite uma razão para o usuário ser mutado <:displaytext:746814240396148757>',
 		},
+		unmute: {
+			syntaxIncorreta: `⁉️ Syntax incorreta, utilize dessa forma \`${prefix}unmute <@usuário/user_id\nPor exemplo » \`${prefix}unmute $MESSAGE_AUTHOR\`. ⁉️`,
+
+			naoEncontrado: '⁉️ Não foi possível encontrar este usuário. ⁉️',
+
+			digiteRazao:
+				'<:displaytext:746814240396148757> Digite uma razão para o usuário ser mutado <:displaytext:746814240396148757>',
+		},
 		demote: {
 			syntaxIncorreta: `⁉️ Sintaxe incorreta, use dessa forma \`${prefix}demote {@user/user_id} {@cargo/cargo_id}\` ⁉️`,
 
