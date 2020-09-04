@@ -97,12 +97,12 @@ class Ban {
 					banEmbedNoticie.setTitle('Punição aplicada!');
 
 					if (bot.cache_control.channels) {
-						bot.cache_control.channels
-							.filter(
-								(channelFiltering) =>
-									channelFiltering.function === 'banned' &&
-									channelFiltering.guild_id === msg.channel.guild.id
-							)
+						console.log(bot.cache_control.channels)
+						const channelsBans = await knex('channels').where({
+							function: 'promocoes',
+							guild_id: msg.guild.id
+						});
+						channelsBans
 							.map((channelBanned) => {
 								const channelInGuild = msg.guild.channels.cache.get(
 									channelBanned.channel_id

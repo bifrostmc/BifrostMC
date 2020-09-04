@@ -37,6 +37,7 @@ class SetChannel {
 					await knex('channels').insert([
 						{
 							channel_id: channel.id,
+							guild_id: channel.guild.id,
 							function: function_name,
 						},
 					]);
