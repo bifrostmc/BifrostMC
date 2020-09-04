@@ -20,6 +20,7 @@ class SetChannel {
 				try {
 					const channel_base = await knex('channels').where({
 						channel_id: channel.id,
+						guild_id: channel.guild.id,
 						function: function_name,
 					});
 					if (channel_base.length > 0) {

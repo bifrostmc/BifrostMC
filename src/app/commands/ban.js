@@ -99,7 +99,7 @@ class Ban {
 					if (bot.cache_control.channels) {
 						console.log(bot.cache_control.channels)
 						const channelsBans = await knex('channels').where({
-							function: 'promocoes',
+							function: 'banned',
 							guild_id: msg.guild.id
 						});
 						channelsBans
