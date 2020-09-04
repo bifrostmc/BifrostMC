@@ -3,6 +3,8 @@ import { MessageEmbed } from 'discord.js';
 import knex from '../database';
 import configuration from '../../../configure';
 
+import CacheController from '../events/CacheController'
+
 class SetChannel {
 	constructor() {
 		this.config = {
@@ -48,6 +50,7 @@ class SetChannel {
 							`🎉🎉 Parabéns! <@${msg.author.id}> Você setou esse canal para receber logs das ${name} feitas.`
 						)
 						.then((msg) => msg.delete({ timeout: 5000 }));
+					CacheController.updateCache()
 					return `O usuário ${msg.author.username} conseguiu setar o canal ${channel.id} para receber logs de ${name}.`;
 				} catch (error) {
 					console.log(error);
