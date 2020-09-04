@@ -18,7 +18,6 @@ class UnbannedTimeoutController {
 
 					setTimeout(async () => {
 						try {
-
 							const dueDateInMS = moment(Number(mutedUser.due_date));
 							const now = moment();
 							const diference = moment.duration(dueDateInMS.diff(now)).asMilliseconds();
@@ -29,7 +28,6 @@ class UnbannedTimeoutController {
 							const userMutedFetched = await guild.members.fetch(
 								mutedUser.user_muted_id
 							);
-
 
 							await userMutedFetched.roles.remove(muterole);
 
@@ -43,6 +41,7 @@ class UnbannedTimeoutController {
 								.setAuthor(userMutedFetched.user.tag, userMutedFetched.user.avatarURL())
 								.setThumbnail(guild.iconURL() || bot.user.avatarURL())
 								.setTitle('Punição anulada!')
+								.setDescription(`Razão da punição » \`\`\`yaml\n${mutedUser.reason}\`\`\``)
 								.addField(
 									'\u200B',
 									`**Usuário desmutado »** \`${userMutedFetched.user.tag}\``

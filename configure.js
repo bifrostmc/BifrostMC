@@ -86,6 +86,8 @@ export default {
 			syntaxIncorreta: `⁉️ Utilize \`${prefix}mute <@usuário/user_id> {tempo} {data_type = [days, months, years]}\`! Caso queira uma punição com o tempo indefinido use dessa forma\nPor exemplo » \`${prefix}mute $MESSAGE_AUTHOR\`. ⁉️`,
 
 			naoEncontrado: '⁉️ Não foi possível encontrar este usuário. ⁉️',
+			digiteRazao:
+				'<:displaytext:746814240396148757> Digite uma razão para o usuário ser mutado <:displaytext:746814240396148757>',
 
 			digiteRazao:
 				'<:displaytext:746814240396148757> Digite uma razão para o usuário ser mutado <:displaytext:746814240396148757>',
@@ -94,6 +96,7 @@ export default {
 			syntaxIncorreta: `⁉️ Syntax incorreta, utilize dessa forma \`${prefix}unmute <@usuário/user_id\nPor exemplo » \`${prefix}unmute $MESSAGE_AUTHOR\`. ⁉️`,
 
 			naoEncontrado: '⁉️ Não foi possível encontrar este usuário. ⁉️',
+			naoEncontradoDB: '⁉️ O usuário mencionado não foi mutado. ⁉️',
 
 			digiteRazao:
 				'<:displaytext:746814240396148757> Digite uma razão para o usuário ser mutado <:displaytext:746814240396148757>',

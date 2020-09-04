@@ -37,14 +37,29 @@ class UnMute {
 			}
 
 			try {
+				const muted = await knex('muted').where({
+					user_muted_id: muteMember.user.id
+				});
+
+				if (!muted) {
+					msg.channel.send(
+						configuration.comandos.unmute.naoEncontradoDB
+							.replace('$USERNAME', msg.member.user.username)
+							.replace('$USER_TAG', msg.member.user.discriminator)
+							.replace('$AUTHOR', msg.author)
+					);
+					return 'O usuário mencionado não foi mutado.'
+				}
+
 				const muteEmbedNoticie = new MessageEmbed()
 					.setColor('RANDOM')
 					.setAuthor(muteMember.user.tag, muteMember.user.avatarURL())
 					.setThumbnail(msg.guild.iconURL() || bot.user.avatarURL())
 					.setTitle('Punição anulada! (Preview)')
+					.setDescription(`Razão da punição » \`\`\`yaml\n${muted.reason}\`\`\``)
 					.addField('\u200B', `**Usuário desmutado »** ${muteMember}`)
 					.addField('\u200B', `**Aplicação feita por »** ${msg.author}`)
-					.addField('\u200B', `**Formato da punição »** \`Mute\``)
+					.addField('\u200B', `**Formato da punição »** \`UnMute\``)
 					.setTimestamp()
 					.setFooter(
 						`Copyright © 2020 ${bot.user.username}`,
