@@ -71,10 +71,11 @@ class Raffle {
 
 						await msg.channel.send(embedAdvertisement);
 
-						bot.cache_control.channels
-							.filter(
-								(channelFiltering) => channelFiltering.function === 'raffle'
-							)
+						const channelsRaffles = await knex('channels').where({
+							function: 'raffle',
+							guild_id: msg.guild.id
+						});
+						channelsRaffles
 							.forEach(async (channelRaffle) => {
 								const channelInGuild = msg.guild.channels.cache.get(
 									channelRaffle.channel_id
