@@ -82,6 +82,14 @@ export default {
 			digiteRazao:
 				'<:displaytext:746814240396148757> Digite uma razão para o usuário ser banido <:displaytext:746814240396148757>',
 		},
+		mute: {
+			syntaxIncorreta: `⁉️ Utilize \`${prefix}mute <@usuário/user_id> {tempo} {data_type = [days, months, years]}\`! Caso queira uma punição com o tempo indefinido use dessa forma\nPor exemplo » \`${prefix}mute $MESSAGE_AUTHOR\`. ⁉️`,
+
+			naoEncontrado: '⁉️ Não foi possível encontrar este usuário. ⁉️',
+
+			digiteRazao:
+				'<:displaytext:746814240396148757> Digite uma razão para o usuário ser mutado <:displaytext:746814240396148757>',
+		},
 		demote: {
 			syntaxIncorreta: `⁉️ Sintaxe incorreta, use dessa forma \`${prefix}demote {@user/user_id} {@cargo/cargo_id}\` ⁉️`,
 
