@@ -74,7 +74,7 @@ class UnMute {
 								channelBanned.channel_id
 							);
 
-							channelInGuild.send(mutedEmbedNoticie);
+							channelInGuild.send(muteEmbedNoticie);
 
 							return channelBanned;
 						});
