@@ -90,11 +90,12 @@ class TicketController {
 						: `o usuário \`${member.user.username}#${member.user.discriminator}\` não possui um ticket.`
 				);
 
-				this.eliminate(user_id, bot, result.data).then((response) => {
+				this.eliminate(user_id, bot, ticket).then((response) => {
+					console.log(response)
 					if (!response)
 						return rej(
 							(author_member.user.id === member.user.id)
-							? 'não foi possível deletar o seu ticket por uim erro desconhecido.'
+							? 'não foi possível deletar o seu ticket por um erro desconhecido.'
 							: `Não foi possível deletar o ticket de \`${member.user.username}#${member.user.discriminator}\`.`
 						);
 
@@ -112,6 +113,7 @@ class TicketController {
 			canal.delete();
 			return true;
 		} catch (err) {
+			console.log(err)
 			return false;
 		}
 	}
