@@ -24,7 +24,7 @@ class MessageController {
 			}
 			let status = (!oldPresence) ? 'offline' : oldPresence.status;
 
-			if ((moment() - moment(presence.updated_at)) >= 300000
+			if ((moment() - moment(presence.updated_at)) >= 604800000
 				&& presence.status.toLowerCase() === "offline"
 				&& status.toLowerCase() === "offline") {
 				try {
