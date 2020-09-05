@@ -51,9 +51,9 @@ class UnbannedTimeoutController {
 								)
 								.addField(
 									'\u200B',
-									`**Formato da punição »** \`${userBanned.reason}\``
+									`**Formato da punição »** \`Desban\``
 								)
-								.addField('\u200B', `**Motivo »** Prazo da punição acabado`)
+								.addField('\u200B', `**Motivo »** ${userBanned.reason}`)
 								.setTimestamp()
 								.setFooter(
 									`Copyright © 2020 ${bot.user.username}`,
@@ -62,7 +62,7 @@ class UnbannedTimeoutController {
 
 							bot.cache_control.channels
 								.filter(
-									(channelFiltering) => channelFiltering.function === 'banned'
+									(channelFiltering) => channelFiltering.function === 'banned' && channelFiltering.guild_id === bannedUser.guild_id
 								)
 								.map((channelBanned) => {
 									const channelInGuild = guild.channels.cache.get(

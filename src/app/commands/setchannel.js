@@ -109,6 +109,11 @@ class SetChannel {
 					help:
 						'Agora esse canal receberá os avisos de silenciamento.',
 				},
+				presence: {
+					formatted: 'presence',
+					help:
+						'Agora esse canal receberá os avisos de banimentos de presences automáticas.',
+				},
 			};
 
 			if (args[0]) {

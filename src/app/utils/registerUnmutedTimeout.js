@@ -29,7 +29,6 @@ export default async function registerUnmutedTimeout(user_muted_id) {
 
 	setTimeout(async () => {
 		try {
-
 			await userMutedFetched.roles.remove(muterole);
 
 			await knex('muted')

@@ -2,10 +2,12 @@ import { Client, Collection } from 'discord.js';
 import path from 'path';
 import { registerCmds } from 'register-cmd-discord';
 
+import PresenceController from './app/events/PresenceController';
 import CacheController from './app/events/CacheController';
 import MessageController from './app/events/MessageController';
 import MessageReactionController from './app/events/MessageReactionController';
 import UnbannedTimeoutController from './app/events/UnbannedTimeoutController';
+import UnmutedTimeoutController from './app/events/UnmutedTimeoutController';
 import RegisterInitializedRaffles from './app/utils/registerInitializedRaffles';
 
 class Bot {
@@ -13,9 +15,9 @@ class Bot {
 		this.bot = new Client();
 
 		(async () => {
-			await this.login();
 			this.registerCommands();
 			this.registerEvents();
+			await this.login();
 		})();
 	}
 
@@ -35,7 +37,9 @@ class Bot {
 
 	async registerEvents() {
 		await CacheController.updateCache(this.bot);
+		new PresenceController(this.bot);
 		new UnbannedTimeoutController(this.bot);
+		new UnmutedTimeoutController(this.bot);
 		new MessageController(this.bot);
 		new MessageReactionController(this.bot);
 		new RegisterInitializedRaffles(this.bot);

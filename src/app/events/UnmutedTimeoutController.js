@@ -22,12 +22,13 @@ class UnbannedTimeoutController {
 							const now = moment();
 							const diference = moment.duration(dueDateInMS.diff(now)).asMilliseconds();
 
-							const guild = server.Bot.bot.guilds.cache.get(mutedUser.guild_id);
+							const guild = bot.guilds.cache.get(mutedUser.guild_id);
 
 							const userAuthor = await bot.users.fetch(mutedUser.author_id);
 							const userMutedFetched = await guild.members.fetch(
 								mutedUser.user_muted_id
 							);
+							const muterole = guild.roles.cache.find((role) => role.name === "Muted");
 
 							await userMutedFetched.roles.remove(muterole);
 
@@ -75,6 +76,7 @@ class UnbannedTimeoutController {
 					return mutedUser;
 				});
 			} catch (error) {
+				console.log(error)
 				console.log('Houve um erro ao criar o cache de usuários banidos.');
 			}
 		})();
