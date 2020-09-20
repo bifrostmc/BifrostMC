@@ -18,10 +18,10 @@ class Say {
 				max: 1,
 			})
 
-			collectorMessageContentForReply.on('collect', (messageCollected) => {
+			collectorMessageContentForReply.on('collect', async (messageCollected) => {
 				await requireMessage.delete()
 
-				msg.channel.send(messageCollected.content)
+				await msg.channel.send(messageCollected.content)
 			})
 		}
 	}
