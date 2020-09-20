@@ -19,9 +19,12 @@ class Say {
 			})
 
 			collectorMessageContentForReply.on('collect', async (messageCollected) => {
-				await requireMessage.delete()
+				const {content} = messageCollected;
 
-				await msg.channel.send(messageCollected.content)
+				await requireMessage.delete()
+				await messageCollected.delete()
+
+				await msg.channel.send(content)
 			})
 		}
 	}
