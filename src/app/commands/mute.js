@@ -114,22 +114,21 @@ class Mute {
 					const msgMuted = await msg.channel.send(muteEmbedNoticie);
 					msgMuted.delete({ timeout: 5000 });
 					muteEmbedNoticie.setTitle('Punição aplicada!');
-					if (bot.cache_control.channels) {
-						const channelsMutes = await knex('channels').where({
-							function: 'muted',
-							guild_id: msg.guild.id
+					
+					const channelsMutes = await knex('channels').where({
+						function: 'muted',
+						guild_id: msg.guild.id
+					});
+					channelsMutes
+						.map((channelBanned) => {
+							const channelInGuild = msg.guild.channels.cache.get(
+								channelBanned.channel_id
+							);
+
+							channelInGuild.send(muteEmbedNoticie);
+
+							return channelBanned;
 						});
-						channelsMutes
-							.map((channelBanned) => {
-								const channelInGuild = msg.guild.channels.cache.get(
-									channelBanned.channel_id
-								);
-
-								channelInGuild.send(muteEmbedNoticie);
-
-								return channelBanned;
-							});
-					}
 				})
 			} catch (error) {
 				console.log(error)

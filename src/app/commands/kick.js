@@ -1,5 +1,6 @@
 import { MessageEmbed } from 'discord.js';
 import configuration from '../../../configure';
+import knex from '../database';
 
 class Kick {
 	constructor() {
@@ -75,11 +76,12 @@ class Kick {
 							await msg.channel.send(embedKickedMessage);
 							await memberKicking.kick(reasonCollectedKick);
 
-							bot.cache_control.channels
-								.filter(
-									(channelFiltering) => channelFiltering.function === 'kicked'
-								)
-								.map(async (channelPunished) => {
+
+							const channelsKicks = await knex('channels').where({
+								function: 'kicked',
+								guild_id: msg.guild.id
+							});
+							channelsKicks.map(async (channelPunished) => {
 									const channelInGuildPunished = msg.guild.channels.cache.get(
 										channelPunished.channel_id
 									);

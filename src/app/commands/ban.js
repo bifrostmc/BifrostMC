@@ -15,12 +15,13 @@ class Ban {
 		};
 		this.run = async ({ msg, args, prefix, bot }) => {
 			if (args.length === 0) {
-				msg.channel.send(
+				const messageSyntaxNotFoundPrimary = await msg.channel.send(
 					configuration.comandos.ban.syntaxIncorreta
 						.replace('$USERNAME', msg.member.user.username)
 						.replace('$USER_TAG', msg.member.user.discriminator)
 						.replace('$AUTHOR', msg.author)
 				);
+				messageSyntaxNotFoundPrimary.delete({ timeout: 5000 })
 				return 'O usuário não informou as propriedades.';
 			}
 			const banMember =

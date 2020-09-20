@@ -26,9 +26,10 @@ class SetChannel {
 						function: function_name,
 					});
 					if (channel_base.length > 0) {
-						channel.send(
+						const thisChannelAlreadyReceiving = await channel.send(
 							`⁉️ <@${msg.author.id}>, Esse canal já está recebendo as logs de ${name} ⁉️`
 						);
+						thisChannelAlreadyReceiving.delete({ timeout: 5000 })
 						return `O canal especificado já está setado como um canal de ${name}.`;
 					}
 					await knex('channels')
@@ -45,11 +46,13 @@ class SetChannel {
 						},
 					]);
 
-					channel
+					const sucessChannelSetted = await channel
 						.send(
 							`🎉🎉 Parabéns! <@${msg.author.id}> Você setou esse canal para receber logs das ${name} feitas.`
 						)
-						.then((msg) => msg.delete({ timeout: 5000 }));
+					
+					sucessChannelSetted.delete({ timeout: 5000 });
+
 					CacheController.updateCache()
 					return `O usuário ${msg.author.username} conseguiu setar o canal ${channel.id} para receber logs de ${name}.`;
 				} catch (error) {

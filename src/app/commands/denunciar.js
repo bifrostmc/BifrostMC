@@ -1,4 +1,5 @@
 import { MessageEmbed } from 'discord.js';
+import knex from '../database';
 import moment from 'moment';
 
 import configuration from '../../../configure';
@@ -28,21 +29,23 @@ class Denunciar {
 							.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
 							.replace('$USERNAME', msg.member.user.username)
 							.replace('$USER_TAG', msg.member.user.discriminator)
-					);
+					).then((msgDelete) => msgDelete.delete({ timeout: 5000 }));
 					return 'O usuário mencionou um usuário inválido.';
 				}
 				try {
-					const channel_base = bot.cache_control.channels.filter(
-						(cachedChannel) => cachedChannel.function === 'denuncias'
-					);
 
-					if (channel_base.length <= 0) {
+					const channelsDenunciations = await knex('channels').where({
+						function: 'denuncias',
+						guild_id: msg.guild.id
+					});
+
+					if (channelsDenunciations.length <= 0) {
 						channel.send(
 							configuration.comandos.denunciar.naoAchouCanal
 								.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
 								.replace('$USERNAME', msg.member.user.username)
 								.replace('$USER_TAG', msg.member.user.discriminator)
-						);
+						).then((msgDelete) => msgDelete.delete({ timeout: 5000 }));
 						return 'Nenhum canal registrado para receber denúncias.';
 					}
 
@@ -55,17 +58,7 @@ class Denunciar {
 								'$MENTION_TAG',
 								`${userMention.user.username}#${userMention.user.discriminator}`
 							)
-					);
-					channel.send(
-						configuration.comandos.denunciar.naoAchouCanal
-							.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
-							.replace('$USERNAME', msg.member.user.username)
-							.replace('$USER_TAG', msg.member.user.discriminator)
-							.replace(
-								'$MENTION_TAG',
-								`${userMention.user.username}#${userMention.user.discriminator}`
-							)
-					);
+					).then((msgDelete) => msgDelete.delete({ timeout: 5000 }));
 					const filterReason = (m) => m.author.id === msg.author.id;
 					const collectorReason = channel.createMessageCollector(filterReason, {
 						time: 1000 * 120,
@@ -84,7 +77,7 @@ class Denunciar {
 										'$MENTION_TAG',
 										`${userMention.user.username}#${userMention.user.discriminator}`
 									)
-							);
+							).then((msgDelete) => msgDelete.delete({ timeout: 5000 }));
 							return;
 						}
 						channel.send(
@@ -96,7 +89,7 @@ class Denunciar {
 									'$MENTION_TAG',
 									`${userMention.user.username}#${userMention.user.discriminator}`
 								)
-						);
+						).then((msgDelete) => msgDelete.delete({ timeout: 5000 }));
 
 						const filterEvidences = (m) => m.author.id === msg.author.id;
 						const collectorEvidences = channel.createMessageCollector(
@@ -144,7 +137,7 @@ class Denunciar {
 								channel
 									.send(previewEmbed)
 									.then((msgPreview) => msgPreview.delete({ timeout: 5000 }));
-								channel_base.map((channelComplaint) => {
+								channelsDenunciations.map((channelComplaint) => {
 									const channelInGuild = msg.guild.channels.cache.get(
 										channelComplaint.channel_id
 									);
@@ -361,7 +354,7 @@ class Denunciar {
 										`${userMention.user.username}#${userMention.user.discriminator}`
 									)
 									.replace('$GUILD_NAME', msg.channel.guild.name)
-							);
+							).then((msgDelete) => msgDelete.delete({ timeout: 5000 }));
 							return `O usuário ${msg.author.username} não incluiu provas em sua denúncia.`;
 						});
 					});
@@ -373,7 +366,7 @@ class Denunciar {
 							.replace('$USERNAME', msg.member.user.username)
 							.replace('$USER_TAG', msg.member.user.discriminator)
 							.replace('$ERROR_MESSAGE', error.message)
-					);
+					).then((msgDelete) => msgDelete.delete({ timeout: 5000 }));
 					return 'Houve um erro ao se comunicar com o banco de dados.';
 				}
 			} else {
@@ -382,7 +375,7 @@ class Denunciar {
 						.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
 						.replace('$USERNAME', msg.member.user.username)
 						.replace('$USER_TAG', msg.member.user.discriminator)
-				);
+				).then((msgDelete) => msgDelete.delete({ timeout: 5000 }));
 				return 'O usuário digitou o comando em um sintaxe incorreta.';
 			}
 			return false;

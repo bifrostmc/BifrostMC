@@ -158,5 +158,8 @@ export default {
 		raffle: {
 			syntaxIncorreta: `⁉️ Sintaxe incorreta, use dessa forma por exemplo \`${prefix}raffle {tempo} {[days, months, years]}\` ⁉️`,
 		},
+		setstatus: {
+			usuarios_permitidos: ['638846057823993928', '303306278716047381', '588532151407083530']
+		}
 	},
 };

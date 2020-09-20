@@ -16,7 +16,7 @@ class Clear {
 					`Sintaxe incorreta por favor digite assim: \`${
 						prefix + this.config.name
 					} {1/100}\``
-				);
+				).then((msgDelete) => msgDelete.delete({ timeout: 5000 }));;
 				return `O usuário mencionou um número inválido para a limpeza.`;
 			}
 			try {
@@ -27,7 +27,7 @@ class Clear {
 						.replace('$USERNAME', msg.member.user.username)
 						.replace('$USER_TAG', msg.member.user.discriminator)
 						.replace('$MENTION_USER_SEND', `<@${msg.author.id}>`)
-				);
+				).then((msgDelete) => msgDelete.delete({ timeout: 5000 }));;
 				return `Com esse comando o usuário apagou ${n} mensagens, no canal ${msg.channel.id}.`;
 			} catch (error) {
 				console.log(error);
@@ -37,7 +37,7 @@ class Clear {
 						.replace('$USERNAME', msg.member.user.username)
 						.replace('$USER_TAG', msg.member.user.discriminator)
 						.replace('$ERROR_MESSAGE', error.message)
-				);
+				).then((msgDelete) => msgDelete.delete({ timeout: 5000 }));;
 				return `Houve um erro ao usuário executar esse comando.`;
 			}
 		};
