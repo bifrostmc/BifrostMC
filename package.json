@@ -28,7 +28,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "express": "^4.17.1",
     "knex": "^0.21.5",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "nodemon": "^2.0.4",
     "pg": "^7",
     "prettier": "^2.0.5",
