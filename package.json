@@ -34,7 +34,7 @@
     "prettier": "^2.0.5",
     "readdirp": "^3.4.0",
     "register-cmd-discord": "^1.0.0",
-    "sqlite3": "^5.0.0",
+    "sqlite3": "^5.0.3",
     "sucrase": "^3.15.0"
   }
 }
